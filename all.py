@@ -1,1 +1,2 @@
-from sage.bijectivematrixalgebra.testPython import *
+from sage.bijectivematrixalgebra.main import *
+from sage.bijectivematrixalgebra.combinatorial_scalar_elements import CombinatorialScalarElement
