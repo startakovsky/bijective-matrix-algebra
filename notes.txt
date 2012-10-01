@@ -44,4 +44,5 @@ Downloaded easy_install -U sphinx
 
 then make latex OR make html
 Installed tex-extra-dox latex package….. texlive
+index.rst in/source contains table of contents (toc)
 

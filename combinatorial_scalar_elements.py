@@ -33,9 +33,9 @@ from sage.structure.sage_object import SageObject
 class CombinatorialScalarElement(SageObject):
     """
     INPUT:
-     - element_name a string indicating the name of the element
-     - sign a number in the set {1,-1}
-     - monomial a list indicating the weight monomial (eg: [0,0,1,2,1] is x2*x3^2*x4)
+    - element_name a string indicating the name of the element
+    - sign a number in the set {1,-1}
+    - monomial a list indicating the weight monomial (eg: [0,0,1,2,1] is x2*x3^2*x4)
     
     OUTPUT:
     Returns l, wrapped as a combinatorial class
@@ -53,6 +53,12 @@ class CombinatorialScalarElement(SageObject):
 		
 		sage: C.get_name()                                           
 		'Cool'
+		
+		sage: C.get_weight()
+		x1^4*x2^3*x4^6*x5^2
+		
+		sage: C.get_sign()
+		-1
 
     """
 
@@ -77,3 +83,9 @@ class CombinatorialScalarElement(SageObject):
     
     def get_name(self):
     	return self._element_name
+    	
+    def get_weight(self):
+    	return self._weight_monomial
+    	
+    def get_sign(self):
+    	return self._sign

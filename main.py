@@ -20,8 +20,11 @@ AUTHORS:
 #
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
-#from sage.rings import *
-from sage.all import *
+
+from sage.rings import *
+
+
+
 
 def create_variables(n):
 	"""Given an integer n, this method returns the string 'x1,..,xn' """
