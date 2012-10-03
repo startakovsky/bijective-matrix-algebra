@@ -1,0 +1,49 @@
+SAMPLE OUTPUT
+
+sage: C = CombinatorialScalarElement("Rock",1,[0,1,1,2]);C  
+Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2.
+
+sage: D = CombinatorialScalarElement("Paper",-1,[1,2]);D    
+Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2.
+
+sage: E = CombinatorialScalarElement("Scissors",1,[1,2,0]);E
+Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2.
+
+sage: F = CombinatorialScalarElement("Lizard",1,[1,2,0]);F  
+Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2.
+
+sage: G = CombinatorialScalar((C,D,E,F)); G                 
+Combinatorial Scalar of cardinality 4.
+
+sage: C.get_sign()                                          
+1
+
+sage: C.get_name()                                          
+'Rock'
+
+sage: C.get_weight()                                        
+x2*x3*x4^2
+
+sage: C.get_genfunc()                                       
+x2*x3*x4^2
+
+sage: G.get_generating_function()                           
+x2*x3*x4^2 + x1*x2^2
+
+sage: G.get_sign_function()                                 
+map: Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2. -> 1, Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2. -> -1, Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2. -> 1, Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2. -> 1
+
+sage: G.get_weight_function()                               
+map: Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2. -> x2*x3*x4^2, Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2. -> x1*x2^2, Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2. -> x1*x2^2, Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2. -> x1*x2^2
+
+sage: G.get_size()                                        
+4
+
+sage: G.is_fully_cancelled()
+False
+
+sage: G.print_list()
+Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2.
+Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2.
+Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2.
+Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2.

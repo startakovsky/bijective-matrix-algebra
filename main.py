@@ -20,10 +20,9 @@ AUTHORS:
 #
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
+#this was a tip from website... minimal importing
 
-from sage.rings import *
-
-
+from sage.all import *
 
 
 def create_variables(n):

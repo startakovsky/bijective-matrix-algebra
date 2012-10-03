@@ -28,7 +28,8 @@ AUTHORS:
 #*****************************************************************************
 from sage.rings import *
 from sage.bijectivematrixalgebra.main import *
-from sage.structure.sage_object import SageObject
+#from sage.structure.unique_representation import UniqueRepresentation
+from sage.structure.all import SageObject
 
 class CombinatorialScalarElement(SageObject):
     """

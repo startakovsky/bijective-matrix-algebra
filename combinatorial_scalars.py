@@ -28,9 +28,12 @@ AUTHORS:
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
 
-#TBD TBD
+#from sage.structure.unique_representation import UniqueRepresentation
+#from sage.structure.all import SageObject
+#from sage.sets.all import *
+from sage.all import *
 
-class CombinatorialScalar(Set):
+class CombinatorialScalar(set):
     """
     INPUT:
      - l an iterable consisting of CombinatorialScalarElements
@@ -39,58 +42,112 @@ class CombinatorialScalar(Set):
     
     EXAMPLES::
     
-        sage: 
-        
+		sage: C = CombinatorialScalarElement("Rock",1,[0,1,1,2]);C  
+		Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2.
+		
+		sage: D = CombinatorialScalarElement("Paper",-1,[1,2]);D    
+		Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2.
+		
+		sage: E = CombinatorialScalarElement("Scissors",1,[1,2,0]);E
+		Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2.
+		
+		sage: F = CombinatorialScalarElement("Lizard",1,[1,2,0]);F  
+		Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2.
+		
+		sage: G = CombinatorialScalar((C,D,E,F)); G                 
+		Combinatorial Scalar of cardinality 4.
+		
+		sage: G.get_generating_function()                           
+		x2*x3*x4^2 + x1*x2^2
+		
+		sage: G.get_sign_function()                                 
+		map: Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2. -> 1, Combinatorial scalar element with name 			Paper, sign -1, and monomial x1*x2^2. -> -1, Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2. -> 1, 			Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2. -> 1
+		
+		sage: G.get_weight_function()                               
+		map: Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2. -> x2*x3*x4^2, Combinatorial scalar element with 		name Paper, sign -1, and monomial x1*x2^2. -> x1*x2^2, Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2. 		-> x1*x2^2, Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2. -> x1*x2^2
+		
+		sage: G.get_size()                                        
+		4
+		
+		sage: G.is_fully_cancelled()
+		False
+		
+		sage: G.print_list()
+		Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2.
+		Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2.
+		Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2.
+		Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2.
+
+
     """
     
     def __init__(self, l):
         """
-        TBD
+        Initiates the object by iterating through the set of combinatorial elements and capturing all relevant information.
         """
         self._sign_dict = dict()
         self._weight_dict = dict()
         self._generating_function = 0
         self._size = 0
-        for i in self:
+        for i in l:
         	self._sign_dict[i] = i.get_sign()
         	self._weight_dict[i] = i.get_weight()
         	self._generating_function += i.get_genfunc()
         	self._size += 1
+        	self.add(i)
 
     def __repr__(self):
         return "Combinatorial Scalar of cardinality " + str(self._size) + "."
 
-    def get_sign_funcion(self):
+    def get_generating_function(self):
+		"""
+		Returns the generating function of the combinatorial scalar.
+		"""
+		return self._generating_function
+
+    def get_sign_function(self):
         """
-        TBD
+        Returns the sign function of the combinatorial scalar.
         """
         M = FiniteSetMaps(self,(-1,1))
-        return M.from_dict(self._sign_dict())
+        return M.from_dict(self._sign_dict)
         
-	def get_weight_function(self):
+    def get_weight_function(self):
 		"""
-		TBD
+		Returns the weight function of the combinatorial scalar.
 		"""
-		M = FiniteSetMaps(self,set(self._weight_dict.viewvalues()))
+		M = FiniteSetMaps(self,self._weight_dict.viewvalues())
 		return M.from_dict(self._weight_dict)
 		
-	def get_size(self):
+    def get_size(self):
 		"""
-		TBD
+		Returns the cardinality of the combinatorial scalar.
 		"""
 		return self._size
 		
-	def get_generating_function(self):
-		"""
-		TBD
-		"""
-		return self._generating_function
 		
-	def get_list(self):
+    def is_fully_cancelled(self):
 		"""
-		TBD
+		Returns 'True' if the combinatorial scalar is fully cancelled and 'False' otherwise.
 		"""
-		return "TBD"
+		positive_set = set()
+		negative_set = set()
+		for i in self:
+			if i.get_sign()==1:
+				positive_set.add(i.get_weight())
+			else:
+				negative_set.add(i.get_weight())
+		if positive_set.intersection(negative_set).issubset(()):
+			return True
+		else:
+			return False
+	
+    def print_list(self):
+		"""
+		Returns a list of all the elements in the combinatorial scalar.
+		"""
+		for i in self:
+			print str(i)
         	
         	
         	
