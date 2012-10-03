@@ -128,7 +128,7 @@ class CombinatorialScalar(set):
 		
     def is_fully_cancelled(self):
 		"""
-		Returns 'True' if the combinatorial scalar is fully cancelled and 'False' otherwise.
+		Returns 'True' if the combinatorial scalar is fully cancelled; 'False' otherwise.
 		"""
 		positive_set = set()
 		negative_set = set()

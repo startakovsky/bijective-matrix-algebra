@@ -26,10 +26,11 @@ AUTHORS:
 #
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
-from sage.rings import *
-from sage.bijectivematrixalgebra.main import *
+#from sage.rings import *
+#from sage.bijectivematrixalgebra.main import *
 #from sage.structure.unique_representation import UniqueRepresentation
-from sage.structure.all import SageObject
+#from sage.structure.all import SageObject
+from sage.all import *
 
 class CombinatorialScalarElement(SageObject):
     """
@@ -65,7 +66,7 @@ class CombinatorialScalarElement(SageObject):
 
     		    
     def __init__(self, element_name, sign, weight):
-        """
+    	"""
         Initiates the object and sets monomial list to variable.
         See ``CombinatorialScalarElement`` for full documentation.
         """
@@ -90,3 +91,23 @@ class CombinatorialScalarElement(SageObject):
     	
     def get_sign(self):
     	return self._sign
+    	
+def create_variables(n):
+	"""
+	Given an integer n, this method returns the string 'x1,..,xn'
+	"""
+	variables = ''
+	for i in range(n):
+		variables+= 'x' + str(i+1) + ','
+	variables = variables[0:len(variables)-1]
+	return variables
+
+def assign_weight_monomial(l):
+	"""
+	Returns weight monomial to list l.
+	"""
+	v = var(create_variables(len(l)))
+	monomial = 1
+	for i in range(len(l)):
+		monomial = monomial * v[i]**l[i]
+	return monomial

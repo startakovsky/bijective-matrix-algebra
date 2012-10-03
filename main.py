@@ -25,18 +25,48 @@ AUTHORS:
 from sage.all import *
 
 
-def create_variables(n):
-	"""Given an integer n, this method returns the string 'x1,..,xn' """
-	variables = ''
-	for i in range(n):
-		variables+= 'x' + str(i+1) + ','
-	variables = variables[0:len(variables)-1]
-	return variables
+def is_bijection(f):
+	"""
+	Returns True if the function is a bijection; False otherwise.
+	"""
+	return f.domain().cardinality() == f.image_set().cardinality()
 
-def assign_weight_monomial(l):
-	"""Returns weight monomial to list l."""
-	v = var(create_variables(len(l)))
-	monomial = 1
-	for i in range(len(l)):
-		monomial = monomial * v[i]**l[i]
-	return monomial
+def is_sign_preserving(f):
+	"""
+	Returns True if the function is sign preserving; False otherwise.
+	"""
+	for i in f.domain():
+		if f(i).get_sign() != i.get_sign():
+			return False
+	return True
+
+def is_sign_reversing(f):
+	"""
+	Returns True if the function is sign reversing; False otherwise.
+	"""
+	for i in f.domain():
+		if f(i).get_sign() != -i.get_sign():
+			return False
+	return True
+
+def is_weight_preserving(f):
+	"""
+	Returns True if the function is weight preserving; False otherwise.
+	"""
+	for i in f.domain():
+		if f(i).get_weight() != i.get_weight():
+			return False
+	return True
+
+			
+def is_involution(f):
+	"""
+	Returns True if the function is an involution; False otherwise.
+	"""
+	if f.domain() != f.codomain():
+		return False
+	else:
+		for i in f.domain():
+			if f(f(i)) != i:
+				return False
+		return True
