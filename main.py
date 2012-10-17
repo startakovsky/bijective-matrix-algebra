@@ -22,9 +22,6 @@ AUTHORS:
 #*****************************************************************************
 #this was a tip from website... minimal importing
 
-from sage.all import *
-
-
 def is_bijection(f):
 	"""
 	Returns True if the function is a bijection; False otherwise.

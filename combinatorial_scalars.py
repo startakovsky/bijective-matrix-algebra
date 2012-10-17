@@ -36,22 +36,22 @@ from sage.all import *
 class CombinatorialScalar(set):
     """
     INPUT:
-     - l an iterable consisting of CombinatorialScalarElements
+     - l an iterable consisting of CombinatorialObjects
     
     Returns l, wrapped as a combinatorial scalar
     
     EXAMPLES::
     
-		sage: C = CombinatorialScalarElement("Rock",1,[0,1,1,2]);C  
+		sage: C = CombinatorialObject("Rock",1,[0,1,1,2]);C  
 		Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2.
 		
-		sage: D = CombinatorialScalarElement("Paper",-1,[1,2]);D    
+		sage: D = CombinatorialObject("Paper",-1,[1,2]);D    
 		Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2.
 		
-		sage: E = CombinatorialScalarElement("Scissors",1,[1,2,0]);E
+		sage: E = CombinatorialObject("Scissors",1,[1,2,0]);E
 		Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2.
 		
-		sage: F = CombinatorialScalarElement("Lizard",1,[1,2,0]);F  
+		sage: F = CombinatorialObject("Lizard",1,[1,2,0]);F  
 		Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2.
 		
 		sage: G = CombinatorialScalar((C,D,E,F)); G                 
@@ -144,10 +144,10 @@ class CombinatorialScalar(set):
 	
     def print_list(self):
 		"""
-		Returns a list of all the elements in the combinatorial scalar.
+		Returns a detailed list of all objects in the combinatorial scalar.
 		"""
 		for i in self:
-			print str(i)
+			print i.get_detail()
         	
         	
         	

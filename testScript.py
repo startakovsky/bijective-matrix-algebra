@@ -1,4 +1,5 @@
-from sage.all import *
+from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
+from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 
 
 
@@ -7,30 +8,42 @@ Test Script
 """
 
 
-C = CombinatorialScalarElement("Rock",1,[0,1,1,2]);C  
-D = CombinatorialScalarElement("Paper",-1,[1,2]);D    
-E = CombinatorialScalarElement("Scissors",1,[1,2,0]);E
-F = CombinatorialScalarElement("Lizard",1,[1,2,0]);F  
-G = CombinatorialScalar((C,D,E,F)); G                 
-
-C.get_sign()                                          
-C.get_name()                                          
-C.get_weight()                                        
-C.get_genfunc()                                       
-
-G.get_generating_function()                           
-G.get_sign_function()                                 
-G.get_weight_function()                               
-G.get_size()                                        
-G.is_fully_cancelled()
-G.print_list()
+Cg = CombinatorialObject("Rock",1);Cg 
+Dg = CombinatorialObject("Paper",-1,[1]);Dg    
+Eg = CombinatorialObject("Scissors",1,[2]);Eg
+Fg = CombinatorialObject("Lizard",1,[1,2,0,0]);Fg  
+g = CombinatorialScalar((Cg,Dg,Eg,Fg)); g                
 
 
-C1 = CombinatorialScalarElement("Rock",1,[0,1,1,2]);C1 
-D1 = CombinatorialScalarElement("Paper",-1,[1,2]);D1  
-E1 = CombinatorialScalarElement("Scissors",1,[1,2,0]);E1
-F1 = CombinatorialScalarElement("Lizard",1,[1,2,0]);F1  
-G1 = CombinatorialScalar((C1,D1,E1,F1)); G1
+Cg.get_sign()                                          
+Cg.get_object()                                          
+Cg.get_weight()                                        
+Cg.get_genfunc()
+Cg.get_detail()                                       
 
-M = FiniteSetMaps(G,G1)
-f = M.random_element()
+
+g.get_generating_function()                           
+g.get_sign_function()                                 
+g.get_weight_function()                               
+g.get_size()                                        
+g.is_fully_cancelled()
+g.print_list()
+
+Ch = CombinatorialObject("Corn",1,[0,0,0,0,0,0,2]);Ch 
+Dh = CombinatorialObject("Garlic",-1,[1,2]);Dh
+Eh = CombinatorialObject("Cucumbers",1,[1,2,2]);Eh
+Fh = CombinatorialObject("Blizzard",1,[0]);Fh  
+h = CombinatorialScalar((Ch,Dh,Eh,Fh)); h
+
+R = CombinatorialScalarRing()
+G = CombinatorialScalarWrapper(g, parent=R)
+H = CombinatorialScalarWrapper(h,parent=R)
+
+G+H
+print 'G*H'
+print G*H
+
+n = 5
+M = MatrixSpace(R,n);M
+
+
