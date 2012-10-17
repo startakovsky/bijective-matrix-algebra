@@ -1,49 +1,90 @@
 SAMPLE OUTPUT
 
-sage: C = CombinatorialScalarElement("Rock",1,[0,1,1,2]);C  
-Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2.
+sage: Cg = CombinatorialObject("Rock",1);Cg 
+Rock
 
-sage: D = CombinatorialScalarElement("Paper",-1,[1,2]);D    
-Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2.
+sage: Dg = CombinatorialObject("Paper",-1,[1]);Dg    
+Paper
 
-sage: E = CombinatorialScalarElement("Scissors",1,[1,2,0]);E
-Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2.
+sage: Eg = CombinatorialObject("Scissors",1,[2]);Eg
+Scissors
 
-sage: F = CombinatorialScalarElement("Lizard",1,[1,2,0]);F  
-Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2.
+sage: Fg = CombinatorialObject("Lizard",1,[1,2,0,0]);Fg  
+Lizard
 
-sage: G = CombinatorialScalar((C,D,E,F)); G                 
+sage: g = CombinatorialScalar((Cg,Dg,Eg,Fg)); g                
 Combinatorial Scalar of cardinality 4.
 
-sage: C.get_sign()                                          
+sage: Cg.get_sign()                                          
 1
 
-sage: C.get_name()                                          
+sage: Cg.get_object()                                          
 'Rock'
 
-sage: C.get_weight()                                        
-x2*x3*x4^2
+sage: Cg.get_weight()                                        
+1
 
-sage: C.get_genfunc()                                       
-x2*x3*x4^2
+sage: Cg.get_genfunc()
+1
 
-sage: G.get_generating_function()                           
-x2*x3*x4^2 + x1*x2^2
+sage: Cg.get_detail()                                       
+'Combinatorial Object Rock, sign 1, and weight 1.' 
 
-sage: G.get_sign_function()                                 
-map: Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2. -> 1, Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2. -> -1, Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2. -> 1, Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2. -> 1
+sage: g.get_generating_function()                           
+x1*x2^2 + x1^2 - x1 + 1
 
-sage: G.get_weight_function()                               
-map: Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2. -> x2*x3*x4^2, Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2. -> x1*x2^2, Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2. -> x1*x2^2, Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2. -> x1*x2^2
+sage: g.get_sign_function()                                 
+map: Scissors -> 1, Lizard -> 1, Paper -> -1, Rock -> 1
 
-sage: G.get_size()                                        
+sage: g.get_weight_function()                               
+map: Scissors -> x1^2, Lizard -> x1*x2^2, Paper -> x1, Rock -> 1
+
+sage: g.get_size()                                        
 4
 
-sage: G.is_fully_cancelled()
-False
+sage: g.is_fully_cancelled()
+True
 
-sage: G.print_list()
-Combinatorial scalar element with name Rock, sign 1, and monomial x2*x3*x4^2.
-Combinatorial scalar element with name Paper, sign -1, and monomial x1*x2^2.
-Combinatorial scalar element with name Scissors, sign 1, and monomial x1*x2^2.
-Combinatorial scalar element with name Lizard, sign 1, and monomial x1*x2^2.
+sage: g.print_list()
+Combinatorial Object Scissors, sign 1, and weight x1^2.
+
+Combinatorial Object Lizard, sign 1, and weight x1*x2^2.
+Combinatorial Object Paper, sign -1, and weight x1.
+
+Combinatorial Object Rock, sign 1, and weight 1.
+sage: 
+
+sage: Ch = CombinatorialObject("Corn",1,[0,0,0,0,0,0,2]);Ch 
+Corn
+
+sage: Dh = CombinatorialObject("Garlic",-1,[1,2]);Dh
+Garlic
+
+sage: Eh = CombinatorialObject("Cucumbers",1,[1,2,2]);Eh
+Cucumbers
+
+sage: Fh = CombinatorialObject("Blizzard",1,[0]);Fh  
+Blizzard
+
+sage: h = CombinatorialScalar((Ch,Dh,Eh,Fh)); h
+Combinatorial Scalar of cardinality 4.
+
+sage: R = CombinatorialScalarRing()
+
+sage: G = CombinatorialScalarWrapper(g, parent=R)
+
+sage: H = CombinatorialScalarWrapper(h,parent=R) 
+
+sage: G+H
+
+[Blizzard, Corn, Cucumbers, Lizard, Paper, Garlic, Rock, Scissors]
+
+sage: print 'G*H'
+G*H
+
+sage: print G*H
+[('Rock', 'Cucumbers'), ('Rock', 'Corn'), ('Paper', 'Garlic'), ('Lizard', 'Blizzard'), ('Paper', 'Corn'), ('Scissors', 'Cucumbers'), ('Scissors', 'Corn'), ('Paper', 'Cucumbers'), ('Rock', 'Garlic'), ('Lizard', 'Corn'), ('Rock', 'Blizzard'), ('Scissors', 'Garlic'), ('Paper', 'Blizzard'), ('Lizard', 'Garlic'), ('Scissors', 'Blizzard'), ('Lizard', 'Cucumbers')]
+
+sage: n = 5
+
+sage: M = MatrixSpace(R,n);M
