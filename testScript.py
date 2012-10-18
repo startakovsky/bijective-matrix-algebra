@@ -1,5 +1,8 @@
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
+from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
+from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
+from sage.matrix.all import *
 
 
 
