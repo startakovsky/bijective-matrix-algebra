@@ -32,7 +32,7 @@ Added the following to lines 145,146 in in /devel/sage/sage/all.py
 
 Run sage -b to build sage with modified source files
 
-Other things I didÉ this is kind of a MANISFESTÉ 
+Other things I didï¿½ this is kind of a MANISFESTï¿½ 
 
 Configured Router for port forwarding ssh and ftp
 Downloaded openssh for ssh
@@ -40,9 +40,11 @@ Downloaded vsftpd for ftp
 
 Downloaded sudo apt-get install python-setuptools
 Downloaded easy_install -U sphinx
-É in order to run sphinx-quickstart to create html and tex docstrings of my code.
+ï¿½ in order to run sphinx-quickstart to create html and tex docstrings of my code.
 
 then make latex OR make html
-Installed tex-extra-dox latex packageÉ.. texlive
+Installed tex-extra-dox latex packageï¿½.. texlive
 index.rst in/source contains table of contents (toc)
+
+Downloaded sudo apt-get install screen
 
