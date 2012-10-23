@@ -88,3 +88,4 @@ sage: print G*H
 sage: n = 5
 
 sage: M = MatrixSpace(R,n);M
+Full MatrixSpace of 5 by 5 dense matrices over Combinatorial Scalar Ring
