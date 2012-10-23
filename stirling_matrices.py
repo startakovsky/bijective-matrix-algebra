@@ -42,7 +42,7 @@ def _stirling1_row(row,dim,prnt):
         r.append(set())
     P = Permutations(row)
     for p in P:
-        t = CombinatorialObject(p,(-1)^(row-len(p.to_cycles())))
+        t = CombinatorialObject(p,(-1)**(row-len(p.to_cycles())))
         r[len(p.to_cycles())].add(t)
     for j in range(dim):
         r[j] = CombinatorialScalarWrapper(CombinatorialScalar(r[j]),parent = prnt)
@@ -66,7 +66,7 @@ def _product_row(mat1, mat2, row):
     for j in range(dim):
         C = CombinatorialScalarWrapper(CombinatorialScalar(set()), parent = prnt)
         for k in range(dim):
-            C = C + (mat1[row,k]*mat2[k,j])
+            C = C   (mat1[row,k]*mat2[k,j])
         r.append(C)
     return r
 
