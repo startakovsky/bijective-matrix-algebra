@@ -66,7 +66,7 @@ def _product_row(mat1, mat2, row):
     for j in range(dim):
         C = CombinatorialScalarWrapper(CombinatorialScalar(set()), parent = prnt)
         for k in range(dim):
-            C = C   (mat1[row,k]*mat2[k,j])
+            C = C + (mat1[row,k]*mat2[k,j])
         r.append(C)
     return r
 
