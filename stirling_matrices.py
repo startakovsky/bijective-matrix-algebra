@@ -6,7 +6,7 @@ It generates the standard combinatorial interpretations of Stirling Matrices and
 
 AUTHORS:
 
-- Steven Tartakovsky (2012): initial version
+- Steven Tartakovsky (2012): initial version yyyy
 
 """
 #*****************************************************************************
