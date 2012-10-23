@@ -1,0 +1,78 @@
+from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
+from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
+from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
+from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
+#from sage.matrix.all import *
+#from sage.combinat.permutation import *
+#from sage.combinat.set_partition import *
+from sage.all import *
+
+
+PermutationOptions(display = 'cycle')
+PermutationOptions(display = 'singleton')
+
+def _stirling1_row(row,dim,prnt):
+    r = list()
+    for i in range(dim):
+        r.append(set())
+    P = Permutations(row)
+    for p in P:
+        t = CombinatorialObject(p,(-1)^(row-len(p.to_cycles())))
+        r[len(p.to_cycles())].add(t)
+    for j in range(dim):
+        r[j] = CombinatorialScalarWrapper(CombinatorialScalar(r[j]),parent = prnt)
+    return r
+
+def _stirling2_row(row,dim, prnt):
+    r = list()
+    for j in range(dim):
+        r.append(set())
+    for p in SetPartitions(row):
+        t = CombinatorialObject(p,1)
+        r[len(p)].add(t)
+    for j in range(dim):
+        r[j] = CombinatorialScalarWrapper(CombinatorialScalar(r[j]),parent = prnt)
+    return r
+
+def _product_row(mat1, mat2, row):
+    dim = mat1.nrows()
+    prnt = mat1.matrix_space().base_ring()
+    r = list()
+    for j in range(dim):
+        C = CombinatorialScalarWrapper(CombinatorialScalar(set()), parent = prnt)
+        for k in range(dim):
+            C = C + (mat1[row,k]*mat2[k,j])
+        r.append(C)
+    return r
+
+def matrix_multiply(mat1,mat2):
+    """
+    Only works for square matrices.
+    """
+    mat_space = mat1.matrix_space()
+    l = list()
+    for row in range(n):
+        l.append(_product_row(mat1,mat2,row))
+    return mat_space(l)
+
+def Stirling1Matrix(dim):
+    """
+    Returns Stirling1 Matrix whose entries are Combinatorial Scalars of signed permutations.
+    """
+    mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
+    prnt = mat_space.base_ring()
+    l = list()
+    for row in range(dim):
+        l.append(_stirling1_row(row,dim,prnt))
+    return mat_space(l)
+
+def Stirling2Matrix(dim):
+    """
+    Returns Stirling2 Matrix whose entries are Combinatorial Scalars of set partitions.
+    """ 
+    mat_space = MatrixSpace(CombinatorialScalarRing(),n)
+    prnt = mat_space.base_ring()
+    l = list()
+    for row in range(dim):
+        l.append(_stirling2_row(row,dim,prnt))
+    return mat_space(l)

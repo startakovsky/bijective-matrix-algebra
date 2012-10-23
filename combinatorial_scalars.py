@@ -125,7 +125,6 @@ class CombinatorialScalar(set):
 		"""
 		return self._size
 		
-		
     def is_fully_cancelled(self):
 		"""
 		Returns 'True' if the combinatorial scalar is fully cancelled; 'False' otherwise.
@@ -142,20 +141,29 @@ class CombinatorialScalar(set):
 		else:
 			return False
 	
+    def create_involution(self):
+    	"""
+    	Returns an arbitrary sign-reversing involution.
+    	WARNING: Should only be used in cases where there are an equal number of positive and negative elements.
+    	"""
+        pos = set()
+        neg = set()
+        d = dict()
+        for elm in self:
+            if elm.get_sign() == 1:
+                pos.add(elm)
+            else:
+                neg.add(elm)
+        M = FiniteSetMaps(self)
+        for elm in pos:
+            a = neg.pop()
+            d[elm] = a
+            d[a] = elm
+        return M.from_dict(d)
+	
     def print_list(self):
 		"""
 		Returns a detailed list of all objects in the combinatorial scalar.
 		"""
 		for i in self:
 			print i.get_detail()
-        	
-        	
-        	
-        
-        
-        
-        
-        
-        
-        
-        

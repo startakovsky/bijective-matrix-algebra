@@ -2,7 +2,6 @@ from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObjec
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
-from sage.matrix.all import *
 
 
 
@@ -13,8 +12,8 @@ Test Script
 
 Cg = CombinatorialObject("Rock",1);Cg 
 Dg = CombinatorialObject("Paper",-1,[1]);Dg    
-Eg = CombinatorialObject("Scissors",1,[2]);Eg
-Fg = CombinatorialObject("Lizard",1,[1,2,0,0]);Fg  
+Eg = CombinatorialObject("Scissors",-1,[2]);Eg
+Fg = CombinatorialObject("Lizard",1);Fg  
 g = CombinatorialScalar((Cg,Dg,Eg,Fg)); g                
 
 
@@ -46,7 +45,5 @@ G+H
 print 'G*H'
 print G*H
 
-n = 5
-M = MatrixSpace(R,n);M
-
+n = 5;
 
