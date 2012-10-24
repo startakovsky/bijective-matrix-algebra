@@ -110,8 +110,7 @@ def matrix_generating_function(m):
     dimx = m.nrows()
     dimy = m.ncols()
     d = dict()
-    mat_space = MatrixSpace(CombinatorialScalarRing(),dimx,dimy)
     for x in range(dimx):
         for y in range(dimy):
             d[(x,y)]=m[x,y].value.get_generating_function()
-    return mat_space(RationalField(),d)
+    return matrix(QQ,d)
