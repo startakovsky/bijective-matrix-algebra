@@ -2,90 +2,135 @@ SAMPLE OUTPUT
 
 sage: Cg = CombinatorialObject("Rock",1);Cg 
 Rock
-
 sage: Dg = CombinatorialObject("Paper",-1,[1]);Dg    
 Paper
-
-sage: Eg = CombinatorialObject("Scissors",1,[2]);Eg
+sage: Eg = CombinatorialObject("Scissors",-1,[2]);Eg
 Scissors
+sage: Fg = CombinatorialObject("Lizard",1);Fg  
+torialScalarWrapper(g, parent=R)
+H = CombinatorialScalarWrapper(h,parent=R)
 
-sage: Fg = CombinatorialObject("Lizard",1,[1,2,0,0]);Fg  
+G+H
+print 'G*H'
+print G*H
+
+n = 4
+
+m1 = Stirling1Matrix(n)
+m2 = Stirling2Matrix(n)
+Ss = matrix_multiply(m2,m1)
+f = bma.involution_dict(Ss)
+bma.print_involution_dict(f)
+
 Lizard
-
 sage: g = CombinatorialScalar((Cg,Dg,Eg,Fg)); g                
 Combinatorial Scalar of cardinality 4.
-
+sage: 
+sage: 
 sage: Cg.get_sign()                                          
 1
-
 sage: Cg.get_object()                                          
 'Rock'
-
 sage: Cg.get_weight()                                        
 1
-
 sage: Cg.get_genfunc()
 1
-
 sage: Cg.get_detail()                                       
-'Combinatorial Object Rock, sign 1, and weight 1.' 
-
+'Combinatorial Object Rock, sign 1, and weight 1.'
+sage: 
+sage: 
 sage: g.get_generating_function()                           
-x1*x2^2 + x1^2 - x1 + 1
-
+-x1^2 - x1 + 2
 sage: g.get_sign_function()                                 
-map: Scissors -> 1, Lizard -> 1, Paper -> -1, Rock -> 1
-
+map: Scissors -> -1, Lizard -> 1, Paper -> -1, Rock -> 1
 sage: g.get_weight_function()                               
-map: Scissors -> x1^2, Lizard -> x1*x2^2, Paper -> x1, Rock -> 1
-
+map: Scissors -> x1^2, Lizard -> 1, Paper -> x1, Rock -> 1
 sage: g.get_size()                                        
 4
-
 sage: g.is_fully_cancelled()
 True
-
 sage: g.print_list()
-Combinatorial Object Scissors, sign 1, and weight x1^2.
-
-Combinatorial Object Lizard, sign 1, and weight x1*x2^2.
+Combinatorial Object Scissors, sign -1, and weight x1^2.
+Combinatorial Object Lizard, sign 1, and weight 1.
 Combinatorial Object Paper, sign -1, and weight x1.
-
 Combinatorial Object Rock, sign 1, and weight 1.
 sage: 
-
 sage: Ch = CombinatorialObject("Corn",1,[0,0,0,0,0,0,2]);Ch 
 Corn
-
 sage: Dh = CombinatorialObject("Garlic",-1,[1,2]);Dh
 Garlic
-
 sage: Eh = CombinatorialObject("Cucumbers",1,[1,2,2]);Eh
 Cucumbers
-
 sage: Fh = CombinatorialObject("Blizzard",1,[0]);Fh  
 Blizzard
-
 sage: h = CombinatorialScalar((Ch,Dh,Eh,Fh)); h
 Combinatorial Scalar of cardinality 4.
-
+sage: 
 sage: R = CombinatorialScalarRing()
-
 sage: G = CombinatorialScalarWrapper(g, parent=R)
-
-sage: H = CombinatorialScalarWrapper(h,parent=R) 
-
+sage: H = CombinatorialScalarWrapper(h,parent=R)
+sage: 
 sage: G+H
-
 [Blizzard, Corn, Cucumbers, Lizard, Paper, Garlic, Rock, Scissors]
-
 sage: print 'G*H'
 G*H
-
 sage: print G*H
 [('Rock', 'Cucumbers'), ('Rock', 'Corn'), ('Paper', 'Garlic'), ('Lizard', 'Blizzard'), ('Paper', 'Corn'), ('Scissors', 'Cucumbers'), ('Scissors', 'Corn'), ('Paper', 'Cucumbers'), ('Rock', 'Garlic'), ('Lizard', 'Corn'), ('Rock', 'Blizzard'), ('Scissors', 'Garlic'), ('Paper', 'Blizzard'), ('Lizard', 'Garlic'), ('Scissors', 'Blizzard'), ('Lizard', 'Cucumbers')]
-
-sage: n = 5
-
-sage: M = MatrixSpace(R,n);M
-Full MatrixSpace of 5 by 5 dense matrices over Combinatorial Scalar Ring
+sage: 
+sage: n = 4
+sage: 
+sage: m1 = Stirling1Matrix(n)
+sage: m2 = Stirling2Matrix(n)
+sage: Ss = matrix_multiply(m2,m1)
+sage: f = bma.involution_dict(Ss)
+sage: bma.print_involution_dict(f)
+---------------------------------------
+row 0, column 0: 1 elements.
+({}, ()) --> ({}, ())
+---------------------------------------
+row 0, column 1: 0 elements.
+---------------------------------------
+row 0, column 2: 0 elements.
+---------------------------------------
+row 0, column 3: 0 elements.
+---------------------------------------
+row 1, column 0: 0 elements.
+---------------------------------------
+row 1, column 1: 1 elements.
+({{1}}, (1)) --> ({{1}}, (1))
+---------------------------------------
+row 1, column 2: 0 elements.
+---------------------------------------
+row 1, column 3: 0 elements.
+---------------------------------------
+row 2, column 0: 0 elements.
+---------------------------------------
+row 2, column 1: 2 elements.
+({{1, 2}}, (1)) --> ({{2}, {1}}, (1,2))
+({{2}, {1}}, (1,2)) --> ({{1, 2}}, (1))
+---------------------------------------
+row 2, column 2: 1 elements.
+({{2}, {1}}, (1)(2)) --> ({{2}, {1}}, (1)(2))
+---------------------------------------
+row 2, column 3: 0 elements.
+---------------------------------------
+row 3, column 0: 0 elements.
+---------------------------------------
+row 3, column 1: 6 elements.
+({{2}, {3}, {1}}, (1,2,3)) --> ({{1, 3}, {2}}, (1,2))
+({{2, 3}, {1}}, (1,2)) --> ({{1, 2, 3}}, (1))
+({{1, 2}, {3}}, (1,2)) --> ({{2}, {3}, {1}}, (1,3,2))
+({{2}, {3}, {1}}, (1,3,2)) --> ({{1, 2}, {3}}, (1,2))
+({{1, 3}, {2}}, (1,2)) --> ({{2}, {3}, {1}}, (1,2,3))
+({{1, 2, 3}}, (1)) --> ({{2, 3}, {1}}, (1,2))
+---------------------------------------
+row 3, column 2: 6 elements.
+({{2}, {3}, {1}}, (1,2)(3)) --> ({{1, 3}, {2}}, (1)(2))
+({{1, 2}, {3}}, (1)(2)) --> ({{2}, {3}, {1}}, (1)(2,3))
+({{2, 3}, {1}}, (1)(2)) --> ({{2}, {3}, {1}}, (1,3)(2))
+({{2}, {3}, {1}}, (1,3)(2)) --> ({{2, 3}, {1}}, (1)(2))
+({{1, 3}, {2}}, (1)(2)) --> ({{2}, {3}, {1}}, (1,2)(3))
+({{2}, {3}, {1}}, (1)(2,3)) --> ({{1, 2}, {3}}, (1)(2))
+---------------------------------------
+row 3, column 3: 1 elements.
+({{2}, {3}, {1}}, (1)(2)(3)) --> ({{2}, {3}, {1}}, (1)(2)(3))

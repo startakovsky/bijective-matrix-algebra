@@ -1,7 +1,4 @@
-from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
-from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
-from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
-from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
+from sage.bijectivematrixalgebra.all import *
 
 
 
@@ -45,5 +42,11 @@ G+H
 print 'G*H'
 print G*H
 
-n = 5;
+n = 4
+
+m1 = Stirling1Matrix(n)
+m2 = Stirling2Matrix(n)
+Ss = matrix_multiply(m2,m1)
+f = bma.involution_dict(Ss)
+bma.print_involution_dict(f)
 
