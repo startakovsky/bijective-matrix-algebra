@@ -24,7 +24,7 @@ AUTHORS:
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
 
-import sage.rings.rational
+from sage.rings.rational_field import RationalField
 from sage.matrix.all import *
 from sage.combinat.permutation import *
 from sage.combinat.set_partition import *
@@ -114,4 +114,4 @@ def matrix_generating_function(m):
     for x in range(dimx):
         for y in range(dimy):
             d[(x,y)]=m[x,y].value.get_generating_function()
-    return mat_space(RationalField(),d)
+    return mat_space(QQ,d)
