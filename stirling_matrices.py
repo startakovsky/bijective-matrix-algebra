@@ -114,4 +114,4 @@ def matrix_generating_function(m):
     for x in range(dimx):
         for y in range(dimy):
             d[(x,y)]=m[x,y].value.get_generating_function()
-    return mat_space(QQ,d)
+    return mat_space(RationalField(),d)
