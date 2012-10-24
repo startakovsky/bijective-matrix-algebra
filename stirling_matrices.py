@@ -24,6 +24,7 @@ AUTHORS:
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
 
+import sage.rings.rational
 from sage.matrix.all import *
 from sage.combinat.permutation import *
 from sage.combinat.set_partition import *
@@ -31,7 +32,6 @@ from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObjec
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
-
 
 PermutationOptions(display = 'cycle')
 PermutationOptions(display = 'singleton')
