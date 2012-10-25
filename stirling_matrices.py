@@ -126,3 +126,22 @@ def matrix_remove_row_col(mat,row,col):
         for y in newcols:
             L[len(L)-1].append(mat[x,y])
     return matrix(mat.parent().base_ring(),len(newrows),len(newcols),L)
+
+def matrix_determinant(mat):
+    dim = mat.nrows()
+    P = Permutations(dim)
+    S = set()
+    for p in P:
+        l = list()
+        sgn = CombinatorialScalar([CombinatorialObject(p.signature(),p.signature())])
+        for i in [1..dim]:
+            l.append(mat[i-1,p(i)-1].value)
+        cp = CartesianProduct(sgn,*l)
+        for i in cp:
+            weight = 1
+            sign = 1
+            for elm in i:
+                sign = sign*elm.get_sign()
+                weight = weight*elm.get_weight()
+            S.add(CombinatorialObject(tuple(i),sign,weight))
+    return CombinatorialScalarWrapper(CombinatorialScalar(S),parent = CombinatorialScalarRing())
