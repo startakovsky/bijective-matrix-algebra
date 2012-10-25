@@ -114,3 +114,15 @@ def matrix_generating_function(m):
         for y in range(dimy):
             d[(x,y)]=m[x,y].value.get_generating_function()
     return matrix(RationalField(),d)
+
+def matrix_remove_row_col(mat,row,col):
+    L = list()
+    newrows = range(mat.nrows())
+    newcols= range(mat.ncols())
+    newrows.pop(row)
+    newcols.pop(col)
+    for x in newrows:
+        L.append(list())
+        for y in newcols:
+            L[len(L)-1].append(mat[x,y])
+    return matrix(mat.parent().base_ring(),len(newrows),len(newcols),L)
