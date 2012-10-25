@@ -134,7 +134,7 @@ def matrix_determinant(mat):
     for p in P:
         l = list()
         sgn = CombinatorialScalar([CombinatorialObject(p.signature(),p.signature())])
-        for i in [1..dim]:
+        for i in range(1,dim+1):
             l.append(mat[i-1,p(i)-1].value)
         cp = CartesianProduct(sgn,*l)
         for i in cp:
