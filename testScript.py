@@ -5,7 +5,6 @@ from sage.bijectivematrixalgebra.all import *
 """
 Test Script
 """
-"""
 
 Cg = CombinatorialObject("Rock",1);Cg 
 Dg = CombinatorialObject("Paper",-1,[1]);Dg    
@@ -49,5 +48,3 @@ m2 = Stirling2Matrix(n)
 Ss = matrix_multiply(m2,m1)
 f = bma.involution_dict(Ss)
 bma.print_involution_dict(f)
-
-"""
