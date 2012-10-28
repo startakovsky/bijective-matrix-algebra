@@ -107,7 +107,7 @@ def restrict_map_not_fixed(f):
     Returns the the same map whose domain is restricted to its non-fixed points.
     """
     not_fxd = not_fixed_points(f)
-    M = FiniteSetMaps(fxd)
+    M = FiniteSetMaps(not_fxd)
     d = dict()
     for i in not_fxd:
         d[i] = f(i)
@@ -132,6 +132,8 @@ def is_SRWP(f):
         return False
     elif not(is_sign_reversing(restrict_map_not_fixed(f))):
         return False
+    elif not(is_sign_preserving(restrict_map_fixed(f))):
+        return False
     else:
         return True
 
@@ -150,6 +152,7 @@ def is_SPWP_bijection(f):
 def involution_dict(mat):
     """
     Returns a dictionary of arbitrary involutions on the entries of a Combinatorial Matrix.
+    Note all weights must be 1 for this.  It may be extended upon in the future.
     """
     if matrix_generating_function(mat)!=MatrixSpace(RationalField(),mat.nrows(),mat.ncols()).identity_matrix():
         print "ERROR: Input needs to be equal to the identity."
@@ -168,7 +171,7 @@ def involution_dict(mat):
         
 def print_involution_dict(f):
     """
-    Prints out all involutions in a dict of involutions (or other maps).
+    Prints out all involutions from a dictionary of involutions indexed by matrix entries (or other maps).
     """
     for key in sorted(f):
         print "---------------------------------------"
