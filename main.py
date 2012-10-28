@@ -29,125 +29,125 @@ from sage.bijectivematrixalgebra.stirling_matrices import matrix_generating_func
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 
 
-def is_bijection(f):
+def is_bijection(func):
 	"""
 	Returns True if the function is a bijection; False otherwise.
 	"""
-	return f.domain().cardinality() == f.image_set().cardinality()
+	return func.domain().cardinality() == func.image_set().cardinality()
 
-def is_sign_preserving(f):
+def is_sign_preserving(func):
 	"""
 	Returns True if the function is sign preserving; False otherwise.
 	"""
-	for i in f.domain():
-		if f(i).get_sign() != i.get_sign():
+	for i in func.domain():
+		if func(i).get_sign() != i.get_sign():
 			return False
 	return True
 
-def is_sign_reversing(f):
+def is_sign_reversing(func):
 	"""
 	Returns True if the function is sign reversing; False otherwise.
 	"""
-	for i in f.domain():
-		if f(i).get_sign() != -i.get_sign():
+	for i in func.domain():
+		if func(i).get_sign() != -i.get_sign():
 			return False
 	return True
 
-def is_weight_preserving(f):
+def is_weight_preserving(func):
 	"""
 	Returns True if the function is weight preserving; False otherwise.
 	"""
-	for i in f.domain():
-		if f(i).get_weight() != i.get_weight():
+	for i in func.domain():
+		if func(i).get_weight() != i.get_weight():
 			return False
 	return True
 
 			
-def is_involution(f):
+def is_involution(func):
 	"""
 	Returns True if the function is an involution; False otherwise.
 	"""
-	if f.domain() != f.codomain():
+	if func.domain() != func.codomain():
 		return False
 	else:
-		for i in f.domain():
-			if f(f(i)) != i:
+		for i in func.domain():
+			if func(func(i)) != i:
 				return False
 		return True
 
-def fixed_points(f):
+def fixed_points(func):
     """
     Returns the Combinatorial Scalar of the fixed points of a map.
     """
     S = set()
-    for i in f.domain():
-        if f(i) == i:
+    for i in func.domain():
+        if func(i) == i:
             S.add(i)
     return CombinatorialScalar(S)
 
-def not_fixed_points(f):
+def not_fixed_points(func):
     """
     Returns the Combinatorial Scalar of the non-fixed points of a map.
     """
-    return CombinatorialScalar(set(f.domain()).difference(fixed_points(f)))
+    return CombinatorialScalar(set(func.domain()).difference(fixed_points(func)))
 
-def restrict_map_fixed(f):
+def restrict_map_fixed(func):
     """
     Returns the same map whose domain is restricted to its fixed points.
     """
-    fxd = fixed_points(f)
+    fxd = fixed_points(func)
     M = FiniteSetMaps(fxd)
     d = dict()
     for i in fxd:
-        d[i] = f(i)
+        d[i] = func(i)
     return M.from_dict(d)
 
-def restrict_map_not_fixed(f):
+def restrict_map_not_fixed(func):
     """
     Returns the the same map whose domain is restricted to its non-fixed points.
     """
-    not_fxd = not_fixed_points(f)
+    not_fxd = not_fixed_points(func)
     M = FiniteSetMaps(not_fxd)
     d = dict()
     for i in not_fxd:
-        d[i] = f(i)
+        d[i] = func(i)
     return M.from_dict(d)
 
-def is_SPWP(f):
+def is_SPWP(func):
     """
     Returns True if the function is sign preserving and weight preserving; False otherwise.
     """
-    if not(is_weight_preserving(f)):
+    if not(is_weight_preserving(func)):
         return False
-    elif not(is_sign_preserving(f)):
+    elif not(is_sign_preserving(func)):
         return False
     else:
         return True
 
-def is_SRWP(f):
+def is_SRWP(func):
     """
     Returns True if the function is sign reversing and weight preserving; False otherwise.
     """
-    if not(is_weight_preserving(f)):
+    if not(is_weight_preserving(func)):
         return False
-    elif not(is_sign_reversing(restrict_map_not_fixed(f))):
+    elif not(is_sign_reversing(restrict_map_not_fixed(func))):
         return False
-    elif not(is_sign_preserving(restrict_map_fixed(f))):
+    elif not(is_sign_preserving(restrict_map_fixed(func))):
         return False
     else:
         return True
 
-def is_SRWP_involution(f):
+def is_SRWP_involution(func):
     """
     Returns True if the function is a sign reversing, weight preserving involution; False otherwise.
     """
-    return is_SRWP(f) and is_involution(f)
+    return is_SRWP(func) and is_involution(func)
 
-def is_SPWP_bijection(f):
+def is_SPWP_bijection(func):
     """
     Returns True if the function is a sign preserving, weight preserving bijection; False otherwise.
     """
-    return is_SPWP and is_bijection(f)
+    return is_SPWP and is_bijection(func)
 
 def involution_dict(mat):
     """
@@ -157,7 +157,7 @@ def involution_dict(mat):
     if matrix_generating_function(mat)!=MatrixSpace(RationalField(),mat.nrows(),mat.ncols()).identity_matrix():
         print "ERROR: Input needs to be equal to the identity."
     else:
-        f = dict()
+        func = dict()
         for x in range(mat.nrows()):
             for y in range(mat.ncols()):
                 if x <> y:
@@ -166,15 +166,15 @@ def involution_dict(mat):
                     t = mat[x,y].value
                     for i in t:
                         _M = FiniteSetMaps(t)
-                        f[(x,y)] = _M.from_dict({i:i})
-        return f
+                        func[(x,y)] = _M.from_dict({i:i})
+        return func
         
-def print_involution_dict(f):
+def print_involution_dict(func):
     """
     Prints out all involutions from a dictionary of involutions indexed by matrix entries (or other maps).
     """
-    for key in sorted(f):
+    for key in sorted(func):
         print "---------------------------------------"
-        print "row " + str(key[0]) + ", column " + str(key[1]) + ": " + str(len(f[key].domain())) + " elements."
-        for elm in f[key].domain():
-            print str(elm) + " --> " + str(f[key](elm))
+        print "row " + str(key[0]) + ", column " + str(key[1]) + ": " + str(len(func[key].domain())) + " elements."
+        for elm in func[key].domain():
+            print str(elm) + " --> " + str(func[key](elm))
