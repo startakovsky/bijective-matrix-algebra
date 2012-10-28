@@ -57,4 +57,6 @@ class CombinatorialScalarRing(Ring):
         Parent.__init__(self,category = Rings())
     def __repr__(self):
         return "Combinatorial Scalar Ring"
+    def __eq__(self,other):
+        return type(other) == type(self)
     Element = CombinatorialScalarWrapper
