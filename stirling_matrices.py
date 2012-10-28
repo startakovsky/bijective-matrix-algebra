@@ -32,6 +32,7 @@ from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObjec
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
+from copy import copy
 
 PermutationOptions(display = 'cycle')
 PermutationOptions(display = 'singleton')
