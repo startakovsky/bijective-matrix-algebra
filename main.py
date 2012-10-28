@@ -161,7 +161,7 @@ def involution_dict(mat):
         for x in range(mat.nrows()):
             for y in range(mat.ncols()):
                 if x <> y:
-                    f[(x,y)] = mat[x,y].value.create_involution()
+                    func[(x,y)] = mat[x,y].value.create_involution()
                 else:
                     t = mat[x,y].value
                     for i in t:
