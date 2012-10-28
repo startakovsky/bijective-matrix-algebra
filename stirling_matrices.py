@@ -145,3 +145,45 @@ def matrix_determinant(mat):
                 weight = weight*elm.get_weight()
             S.add(CombinatorialObject(tuple(i),sign,weight))
     return CombinatorialScalarWrapper(CombinatorialScalar(S),parent = CombinatorialScalarRing())
+
+def matrix_combinatorial_adjoint(mat):
+    dim = mat.nrows()
+    M = list()
+    mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
+    prnt = mat_space.base_ring()
+    #create list L of lists of sets, dimension is increased by one to mitigate index confusion
+    L = list()
+    for i in range(dim+1):
+        L.append(list())
+        for j in range(dim+1):
+            L[i].append(set())
+    P = Permutations(dim)
+    for p in P:
+        p_comb = CombinatorialScalar([CombinatorialObject(p,p.signature())])
+        l = list()
+        for i in range(1,dim+1):
+            l.append(mat[p(i)-1,i-1].value)
+        #This list will have empty sets, which will yield to an empty cartesian product
+        #especially when the matrix input is triangular (except for the identity permutation).
+        #We will now iterate through the selected entries in each column
+        #and create a set of a singleton of an empty string that corresponds 
+        #to the "missing" element of the tuple described in definition 39.
+        for i in range(1,dim+1):
+            copy_l = copy(l)
+            copy_l[i-1]=CombinatorialScalar([CombinatorialObject('_',1)])
+            cp = CartesianProduct(p_comb,*copy_l)
+            for tupel in cp:
+                tupel = tuple(tupel)
+                tupel_weight = 1
+                tupel_sign = 1
+                for elm in tupel:
+                    tupel_sign = tupel_sign*elm.get_sign()
+                    tupel_weight = tupel_weight*elm.get_weight()
+                L[i][p(i)].add(CombinatorialObject(tupel,tupel_sign,tupel_weight))
+    #turn these sets into CombinatorialScalars
+    for i in range(1,dim+1):
+        l = list()
+        for j in range(1,dim+1):
+            l.append(CombinatorialScalarWrapper(CombinatorialScalar(L[i][j]),parent=prnt))
+        M.append(l)
+    return mat_space(M)
