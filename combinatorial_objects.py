@@ -84,7 +84,7 @@ class CombinatorialObject(SageObject):
     def __cmp__(self,other):
         print self.get_object() == other.get_object()
         print self.get_object() == other.get_object()
-        return (self.get_object() == other.get_object()) and (self.get_genfunc() == other.get_genfunc())
+        return ((self.get_object() == other.get_object()) and (str(self.get_genfunc()) == str(other.get_genfunc())))
 
     def get_detail(self):
         return "Combinatorial Object %s, sign %d, and weight %s." %(self._object, self._sign, str(self._weight_monomial))
