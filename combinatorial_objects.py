@@ -30,6 +30,7 @@ AUTHORS:
 #from sage.bijectivematrixalgebra.main import *
 #from sage.structure.unique_representation import UniqueRepresentation
 #from sage.structure.all import SageObject
+from sage.symbolic.expression import Expression
 from sage.all import *
 
 class CombinatorialObject(SageObject):
@@ -81,7 +82,9 @@ class CombinatorialObject(SageObject):
         return str(self._object)
 
     def __cmp__(self,other):
-        return (self.get_object() is other.get_object()) and (self.get_genfunc() is other.get_genfunc())
+        print self.get_object() == other.get_object()
+        print self.get_object() == other.get_object()
+        return (self.get_object() == other.get_object()) and (self.get_genfunc() == other.get_genfunc())
 
     def get_detail(self):
         return "Combinatorial Object %s, sign %d, and weight %s." %(self._object, self._sign, str(self._weight_monomial))
