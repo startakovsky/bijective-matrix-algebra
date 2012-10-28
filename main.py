@@ -26,7 +26,7 @@ from sage.rings.rational_field import RationalField
 from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.sets.set import Set
 from sage.bijectivematrixalgebra.stirling_matrices import matrix_generating_function
-from sage.bijectivematrixalgebra.combinatorial_scalar import CombinatorialScalar
+from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 
 
 def is_bijection(f):
