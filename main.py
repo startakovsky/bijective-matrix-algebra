@@ -74,7 +74,82 @@ def is_involution(f):
 				return False
 		return True
 
+def fixed_points(f):
+    """
+    Returns the Combinatorial Scalar of the fixed points of a map.
+    """
+    S = set()
+    for i in f.domain():
+        if f(i) == i:
+            S.add(i)
+    return CombinatorialScalar(S)
+
+def not_fixed_points(f):
+    """
+    Returns the Combinatorial Scalar of the non-fixed points of a map.
+    """
+    return CombinatorialScalar(set(f.domain()).difference(fixed_points(f)))
+
+def restrict_map_fixed(f):
+    """
+    Returns the same map whose domain is restricted to its fixed points.
+    """
+    fxd = fixed_points(f)
+    M = FiniteSetMaps(fxd)
+    d = dict()
+    for i in fxd:
+        d[i] = f(i)
+    return M.from_dict(d)
+
+def restrict_map_not_fixed(f):
+    """
+    Returns the the same map whose domain is restricted to its non-fixed points.
+    """
+    not_fxd = not_fixed_points(f)
+    M = FiniteSetMaps(fxd)
+    d = dict()
+    for i in not_fxd:
+        d[i] = f(i)
+    return M.from_dict(d)
+
+def is_SPWP(f):
+    """
+    Returns True if the function is sign preserving and weight preserving; False otherwise.
+    """
+    if not(is_weight_preserving(f)):
+        return False
+    elif not(is_sign_preserving(f)):
+        return False
+    else:
+        return True
+
+def is_SRWP(f):
+    """
+    Returns True if the function is sign reversing and weight preserving; False otherwise.
+    """
+    if not(is_weight_preserving(f)):
+        return False
+    elif not(is_sign_reversing(restrict_map_not_fixed(f))):
+        return False
+    else:
+        return True
+
+def is_SRWP_involution(f):
+    """
+    Returns True if the function is a sign reversing, weight preserving involution; False otherwise.
+    """
+    return is_SRWP(f) and is_involution(f)
+
+def is_SPWP_bijection(f):
+    """
+    Returns True if the function is a sign preserving, weight preserving bijection; False otherwise.
+    """
+    return is_SPWP and is_bijection(f)
+
 def involution_dict(mat):
+    """
+    Returns a dictionary of arbitrary involutions on the entries of a Combinatorial Matrix.
+    """
     if matrix_generating_function(mat)!=MatrixSpace(RationalField(),mat.nrows(),mat.ncols()).identity_matrix():
         print "ERROR: Input needs to be equal to the identity."
     else:
@@ -91,6 +166,9 @@ def involution_dict(mat):
         return f
         
 def print_involution_dict(f):
+    """
+    Prints out all involutions in a dict of involutions (or other maps).
+    """
     for key in sorted(f):
         print "---------------------------------------"
         print "row " + str(key[0]) + ", column " + str(key[1]) + ": " + str(len(f[key].domain())) + " elements."
