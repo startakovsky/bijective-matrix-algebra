@@ -132,8 +132,6 @@ def is_SRWP(func):
         return False
     elif not(is_sign_reversing(restrict_map_not_fixed(func))):
         return False
-    elif not(is_sign_preserving(restrict_map_fixed(func))):
-        return False
     else:
         return True
 
