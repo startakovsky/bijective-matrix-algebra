@@ -32,7 +32,7 @@ from copy import deepcopy
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 
-class CombinatorialScalarWrapper(ElementWrapper):
+class CombinatorialScalarWrapper(RingElement):
     """
     TBD
     """
