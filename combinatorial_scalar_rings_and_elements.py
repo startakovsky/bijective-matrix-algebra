@@ -32,24 +32,32 @@ from copy import deepcopy
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 
+
 class CombinatorialScalarWrapper(RingElement):
-    """
-    TBD
-    """
-    wrapped_class = CombinatorialScalar
-    def __init__(self,parent):
+    def __init__(self,combin_scalar,parent = None):
+        if parent is None:
+            raise ValueError, "The parent ring must be provided"
+        self.value = combin_scalar
         RingElement.__init__(self,parent)
     def __repr__(self):
         return str(list(self.value))
+
+class CombinatorialScalarWrapper(CombinatorialScalarWrapper):
+    """
+    TBD
+    """
+    def __eq__(self,other):
+        return self.value==other.value and self.parent() == other.parent()
     def __add__(self,other):
-        return CombinatorialScalarWrapper(CombinatorialScalar(self.value.union(deepcopy(other.value))), parent = self.parent())
+        s = self.value
+        o = other.value
+        return CombinatorialScalarWrapper(CombinatorialScalar(s.union(o)), parent = self.parent())
     def __mul__(self,other):
         new_set = set()
         for s in self.value:
             for o in other.value:
                 new_set.add(CombinatorialObject((s.get_object(),o.get_object()),s.get_sign()*o.get_sign(),s.get_weight()*o.get_weight()))
         return CombinatorialScalarWrapper(CombinatorialScalar(new_set), parent = self.parent())
-        
         
 class CombinatorialScalarRing(Ring):
     """
@@ -61,4 +69,6 @@ class CombinatorialScalarRing(Ring):
         return "Combinatorial Scalar Ring"
     def __eq__(self,other):
         return type(other) == type(self)
+    def _zero_element(self):
+        return CombinatorialScalarWrapper(CombinatorialScalar(set()),parent=self)
     Element = CombinatorialScalarWrapper
