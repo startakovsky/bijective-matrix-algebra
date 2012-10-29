@@ -37,6 +37,8 @@ class CombinatorialScalarWrapper(RingElement):
     TBD
     """
     wrapped_class = CombinatorialScalar
+    def __init__(self,parent):
+        RingElement.__init__(self,parent)
     def __repr__(self):
         return str(list(self.value))
     def __add__(self,other):
