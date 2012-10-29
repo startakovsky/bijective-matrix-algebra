@@ -188,3 +188,11 @@ def matrix_combinatorial_adjoint(mat):
             l.append(CombinatorialScalarWrapper(CombinatorialScalar(L[i][j]),parent=prnt))
         M.append(l)
     return mat_space(M)
+
+def matrix_print(mat):
+    print "Printing..."
+    for i in range(mat.nrows()):
+        for j in range(mat.ncols()):
+            print "row " + str(i) + ", column " + str(j) + "; " + str(mat[i,j].value.get_size()) + " elements"
+            mat[i,j].value.print_list()
+            print "------------------------------"
