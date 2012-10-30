@@ -95,6 +95,9 @@ class CombinatorialObject(SageObject):
     
     def get_object(self):
     	return self._object
+    
+    def set_object(self,obj):
+        self._object = obj
     	
     def get_weight(self):
     	return self._weight_monomial

@@ -163,7 +163,30 @@ class CombinatorialScalar(set):
 	
     def print_list(self):
 		"""
-		Returns a detailed list of all objects in the combinatorial scalar.
+        Prints out the details of all objects in Combinatorial Scalar.
 		"""
 		for i in self:
 			print i.get_detail()
+	
+    def clean_up_scalar(self):
+	    """
+	    Cleans up combinatorial scalars whose elements are nested tuples.
+	    This may be called after multiplication occurs.
+	    """
+	    for i in self:
+	        i.set_object(clean_up_object_tuple(i.get_object()))
+	
+def clean_up_object_tuple(l):
+    """
+    Returns just the objects inside nested tuples and preserves the order.
+    """
+    K = list()
+    if type(l)==tuple:
+        for i in range(len(l)):
+            if type(l[i]) == tuple:
+                K.extend(clean_up_object_tuple(l[i]))
+            else:
+                K.append(l[i])
+        return tuple(K)
+    else:
+        return l
