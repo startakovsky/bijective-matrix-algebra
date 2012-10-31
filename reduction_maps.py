@@ -28,6 +28,7 @@ AUTHORS:
 #*****************************************************************************
 
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
+from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 from sage.bijectivematrixalgebra.main import fixed_points
 from sage.bijectivematrixalgebra.main import is_SRWP_involution
@@ -35,6 +36,7 @@ from sage.bijectivematrixalgebra.main import is_SPWP_bijection
 from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.structure.sage_object import SageObject
 from sage.sets.finite_set_map_cy import FiniteSetEndoMap_Set
+from sage.sets.finite_set_maps import FiniteSetMap_Set
 #from sage.symbolic.expression import Expression
 
 
@@ -63,9 +65,9 @@ class ReductionMaps(SageObject):
             raise ValueError, "The second input must be a Combinatorial Scalar Wrapper"
         elif not(bool(A.value.get_generating_function()==B.value.get_generating_function())):
             raise ValueError, "The generating functions of the scalars are not equal"
-        elif type(f) != FiniteSetEndoMap_Set:
+        elif type(f)!= FiniteSetMap_Set and type(f) != FiniteSetEndoMap_Set:
             raise ValueError, "The third input must be a map in FiniteSetMaps"
-        elif type(f0) != FiniteSetEndoMap_Set:
+        elif type(f0) != FiniteSetMap_Set and type(f0) != FiniteSetEndoMap_Set:
             raise ValueError, "The fourth input must be a map in FiniteSetMaps"
         elif set(f.domain()) != A.value:
             raise ValueError, "The third input must have domain of first input"
@@ -111,14 +113,46 @@ class ReductionMaps(SageObject):
 		return self._B
 
     def transitivity(self,other=None):
-		"""
-		TBD
-		"""
-		return "This needs to be built out."
-		
+        """
+        TBD
+        """
+        if other is None:
+            raise ValueError, "Enter a redution map as a parameter"
+        elif self.get_B() != other.get_A():
+            raise ValueError, "These are not good candidate sets for reduction mapping"
+        else:
+            dic_h = dict()
+            dic_h0 = dict()
+            A = self.get_A()
+            B = self.get_B()
+            C = other.get_B()
+            f = self.get_SRWP()
+            f0 = self.get_SPWP()
+            g = other.get_SRWP()
+            g0 = other.get_SPWP()
+            for elm in A:
+                if elm in fixed_points(f):
+                    if f0(elm) in fixed_points(g):
+                        dic_h0[elm] = g0(f0(elm))
+                        dic_h[elm] = elm
+                    else:
+                        dic_h[elm] = inverse(f0)(g(f0(elm)))
+                else:
+                    dic_h[elm] = f(elm)
+            h = FiniteSetMaps(A).from_dict(dic_h)
+            h0 = FiniteSetMaps(CombinatorialScalar(dic_h0.values()),C).from_dict(dic_h0)
+            A = CombinatorialScalarWrapper(A,parent=CombinatorialScalarRing())
+            C = CombinatorialScalarWrapper(C,parent=CombinatorialScalarRing())
+            return ReductionMaps(A,C,h,h0)
 
     def confluence(self,other=None):
 		"""
 		TBD
 		"""	
 		return "This needs to be built out."
+
+def inverse(func):
+    dic = func.fibers()
+    for i in func.codomain():
+        dic[i] = set(dic[i]).pop()
+    return FiniteSetMaps(func.codomain(),func.domain()).from_dict(dic)
