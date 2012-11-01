@@ -33,6 +33,7 @@ from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScala
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from copy import copy
+from copy import deepcopy
 
 PermutationOptions(display = 'cycle')
 PermutationOptions(display = 'singleton')
@@ -188,6 +189,19 @@ def matrix_combinatorial_adjoint(mat):
             l.append(CombinatorialScalarWrapper(CombinatorialScalar(L[i][j]),parent=prnt))
         M.append(l)
     return mat_space(M)
+
+def matrix_clean_up(mat):
+    dim = mat.nrows()
+    L = list()
+    mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
+    prnt = mat_space.base_ring()
+    for i in range(dim):
+        L.append(list())
+        for j in range(dim):
+            tmp_scalar = deepcopy(mat[i,j].value)
+            tmp_scalar.clean_up_scalar()
+            L[i].append(CombinatorialScalarWrapper(tmp_scalar,parent=prnt))
+    return mat_space(L)
 
 def matrix_print(mat):
     print "Printing..."
