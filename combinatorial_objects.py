@@ -84,11 +84,14 @@ class CombinatorialObject(SageObject):
     def __eq__(self,other):
         return self.get_object() == other.get_object() and bool(self.get_genfunc() == other.get_genfunc())
 
+    def __hash__(self):
+        return hash(self.get_tuple())
+        
     def get_detail(self):
         return "Combinatorial Object %s, sign %d, and weight %s." %(self._object, self._sign, str(self._weight_monomial))
 
     def get_tuple(self):
-    	return (self._element_name,self._sign,self._weight_monomial)
+    	return (self.get_object(),self.get_sign(),self.get_weight())
 
     def get_genfunc(self):
     	return self._sign * self._weight_monomial
@@ -105,12 +108,14 @@ class CombinatorialObject(SageObject):
     def get_sign(self):
     	return self._sign
     	
-    def return_cleaned_up_object(self):
+    def return_cleaned_up_version(self):
 		"""
-		Returns a potentially unchanged cleaned up version of this object.
-		Eliminates nested tuples.
+		Returns a new cleaned up version of this object.
+		Eliminates nested tuples.  Does not change actual object.
 		"""
-		return clean_up_object(self.get_object())
+		t = deepcopy(self)
+		t.set_object(clean_up_object(self.get_object()))
+		return t
 
 def create_variables(n):
 	"""

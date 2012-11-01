@@ -174,5 +174,5 @@ class CombinatorialScalar(set):
 	    This may be called after multiplication occurs.
 	    """
 	    for i in self:
-	        i.set_object(i.return_cleaned_up_object())
+	        i.set_object(i.return_cleaned_up_version().get_object())
 	

@@ -129,7 +129,7 @@ class ReductionMaps(SageObject):
         TBD
         """
         if other is None:
-            raise ValueError, "Enter a redution map as a parameter"
+            raise ValueError, "Enter a reduction map as a parameter"
         elif self.get_B() != other.get_A():
             raise ValueError, "These are not good candidate sets for reduction mapping"
         else:
