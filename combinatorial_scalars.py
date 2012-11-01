@@ -168,11 +168,13 @@ class CombinatorialScalar(set):
 		for i in self:
 			print i.get_detail()
 	
-    def clean_up_scalar(self):
+    def get_cleaned_up_version(self):
 	    """
 	    Cleans up combinatorial scalars whose elements are nested tuples.
 	    This may be called after multiplication occurs.
 	    """
+	    s = set()
 	    for i in self:
-	        i.set_object(i.return_cleaned_up_version().get_object())
+	        s.add(i.get_cleaned_up_version())
+	    return CombinatorialScalar(s)
 	

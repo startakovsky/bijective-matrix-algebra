@@ -60,24 +60,22 @@ class ReductionMaps(SageObject):
         """
         TBD
         """
-        _A = copy(A.value) #this is a fix
-        _B = copy(B.value) #to scalar --> set comparison issues
         
         if type(A)!=CombinatorialScalarWrapper:
             raise ValueError, "The first input must be a Combinatorial Scalar Wrapper"
         elif type(B)!=CombinatorialScalarWrapper:
             raise ValueError, "The second input must be a Combinatorial Scalar Wrapper"
-        elif not(bool(_A.get_generating_function()==_B.get_generating_function())):
+        elif not(bool(A.value.get_generating_function()==B.value.get_generating_function())):
             raise ValueError, "The generating functions of the scalars are not equal"
         elif type(f)!= FiniteSetMap_Set and type(f) != FiniteSetEndoMap_Set:
             raise ValueError, "The third input must be a map in FiniteSetMaps"
         elif type(f0) != FiniteSetMap_Set and type(f0) != FiniteSetEndoMap_Set:
             raise ValueError, "The fourth input must be a map in FiniteSetMaps"
-        elif set(f.domain()) != _A:
+        elif set(f.domain()) != A.value:
             raise ValueError, "The third input must have domain of first input"
         elif set(f0.domain()) != fixed_points(f):
             raise ValueError, "The fourth input must have domain of fixed points of third input"
-        elif set(f0.image_set())!=_B:
+        elif set(f0.image_set())!=B.value:
             raise ValueError, "The fourth input must have image of second input"
         elif not(is_SRWP_involution(f)):
             raise ValueError, "The third input must be an SRWP involution"

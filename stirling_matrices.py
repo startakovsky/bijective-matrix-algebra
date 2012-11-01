@@ -198,9 +198,7 @@ def matrix_clean_up(mat):
     for i in range(dim):
         L.append(list())
         for j in range(dim):
-            tmp_scalar = deepcopy(mat[i,j].value)
-            tmp_scalar.clean_up_scalar()
-            L[i].append(CombinatorialScalarWrapper(tmp_scalar,parent=prnt))
+            L[i].append(CombinatorialScalarWrapper(mat[i,j].value.get_cleaned_up_version(),parent=prnt))
     return mat_space(L)
 
 def matrix_print(mat):

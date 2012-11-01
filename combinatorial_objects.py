@@ -108,7 +108,7 @@ class CombinatorialObject(SageObject):
     def get_sign(self):
     	return self._sign
     	
-    def return_cleaned_up_version(self):
+    def get_cleaned_up_version(self):
 		"""
 		Returns a new cleaned up version of this object.
 		Eliminates nested tuples.  Does not change actual object.
