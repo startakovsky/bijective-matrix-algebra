@@ -174,19 +174,5 @@ class CombinatorialScalar(set):
 	    This may be called after multiplication occurs.
 	    """
 	    for i in self:
-	        i.set_object(clean_up_object_tuple(i.get_object()))
+	        i.set_object(i.return_cleaned_up_object())
 	
-def clean_up_object_tuple(l):
-    """
-    Returns just the objects inside nested tuples and preserves the order.
-    """
-    K = list()
-    if type(l)==tuple:
-        for i in range(len(l)):
-            if type(l[i]) == tuple:
-                K.extend(clean_up_object_tuple(l[i]))
-            else:
-                K.append(l[i])
-        return tuple(K)
-    else:
-        return l

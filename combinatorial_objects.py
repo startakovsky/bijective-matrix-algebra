@@ -105,6 +105,13 @@ class CombinatorialObject(SageObject):
     def get_sign(self):
     	return self._sign
     	
+    def return_cleaned_up_object(self):
+		"""
+		Returns a potentially unchanged cleaned up version of this object.
+		Eliminates nested tuples.
+		"""
+		return clean_up_object(self.get_object())
+
 def create_variables(n):
 	"""
 	Given an integer n, this method returns the string 'x1,..,xn'
@@ -125,3 +132,18 @@ def assign_weight_monomial(l):
 	for i in range(len(l)):
 		monomial = monomial * v[i]**l[i]
 	return monomial
+	
+def clean_up_object(l):
+    """
+    Returns just the objects inside nested tuples and preserves the order.
+    """
+    K = list()
+    if type(l)==tuple:
+        for i in range(len(l)):
+            if type(l[i]) == tuple:
+                K.extend(clean_up_object(l[i]))
+            else:
+                K.append(l[i])
+        return tuple(K)
+    else:
+        return l

@@ -176,3 +176,5 @@ def print_involution_dict(func):
         print "row " + str(key[0]) + ", column " + str(key[1]) + ": " + str(len(func[key].domain())) + " elements."
         for elm in func[key].domain():
             print str(elm) + " --> " + str(func[key](elm))
+            
+
