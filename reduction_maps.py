@@ -85,32 +85,44 @@ class ReductionMaps(SageObject):
             self._f = f
             self._f0 = f0
 
+    def __eq__(self,other):
+        if self.get_A() != other.get_A():
+            return False
+        elif self.get_B() != other.get_B():
+            return False
+        elif self.get_SRWP() != other.get_SRWP():
+            return False
+        elif self.get_SPWP() != other.get_SPWP():
+            return False
+        else:
+            return True
+
     def __repr__(self):
         return "This represents the reduction of " + str(list(self._A)) + " to " + str(list(self._B)) + "."
 
     def get_SRWP(self):
-		"""
-		TBD
-		"""
-		return self._f
+        """
+        TBD
+        """
+        return self._f
 
     def get_SPWP(self):
-		"""
-		TBD
-		"""
-		return self._f0
+        """
+        TBD
+        """
+        return self._f0
 
     def get_A(self):
-		"""
-		TBD
-		"""
-		return self._A
+        """
+        TBD
+        """
+        return self._A
 
     def get_B(self):
-		"""
-		TBD
-		"""
-		return self._B
+        """
+        TBD
+        """
+        return self._B
 
     def transitivity(self,other=None):
         """
@@ -146,10 +158,48 @@ class ReductionMaps(SageObject):
             return ReductionMaps(A,C,h,h0)
 
     def confluence(self,other=None):
-		"""
-		TBD
-		"""	
-		return "This needs to be built out."
+        """
+        Returns the reduction of C to B, where the usage is:
+        r1.confluence(r2), and r1 maps A to B, B fully cancelled,
+        and r2 maps A to C.
+        """
+        if other is None:
+            raise ValueError, "Enter a redution map as a parameter"
+        elif self.get_A() != other.get_A():
+            raise ValueError, """ "A" """ " sets have to match"
+        elif not(self.get_B().is_fully_cancelled()):
+            raise ValueError, """ "B" """ " on the left is not fully cancelled"
+        else:
+            dic_h = dict()
+            dic_h0 = dict()
+            A = self.get_A()
+            B = self.get_B()
+            C = other.get_B()
+            f = self.get_SRWP()
+            f0 = self.get_SPWP()
+            g = other.get_SRWP()
+            g0 = other.get_SPWP()
+            fxd_f = fixed_points(self.get_SRWP())
+            fxd_g = fixed_points(other.get_SRWP())
+            for c in C:
+                x = inverse(g0)(c)
+                while True:
+                    if x in fxd_f: #a fixed point of h
+                        dic_h[c] = c
+                        dic_h0[c] = f0(x)
+                        break
+                    else:
+                        x = f(x)
+                    if x in fxd_g: #not a fixed point of h
+                        dic_h[c]=g0(x)
+                        break
+                    else:
+                        x = g(x)
+            h = FiniteSetMaps(C).from_dict(dic_h)
+            h0 = FiniteSetMaps(CombinatorialScalar(dic_h0.values()),B).from_dict(dic_h0)
+            C = CombinatorialScalarWrapper(C,parent=CombinatorialScalarRing())
+            B = CombinatorialScalarWrapper(B,parent=CombinatorialScalarRing())
+            return ReductionMaps(C,B,h,h0)
 
 def inverse(func):
     dic = func.fibers()
