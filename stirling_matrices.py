@@ -198,7 +198,7 @@ def matrix_identity(dim):
         L.append(list())
         for j in range(dim):
             if i==j:
-                L[i].append(CombinatorialScalarWrapper(prnt._zero().value,parent=prnt))
+                L[i].append(CombinatorialScalarWrapper(prnt._one().value,parent=prnt))
             else:
                 L[i].append(CombinatorialScalarWrapper(prnt._zero().value,parent=prnt))
     return mat_space(L)
