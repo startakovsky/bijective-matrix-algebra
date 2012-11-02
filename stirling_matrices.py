@@ -191,15 +191,17 @@ def matrix_combinatorial_adjoint(mat):
     return mat_space(M)
 
 def matrix_identity(dim):
+    mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
+    prnt = mat_space.base_ring()
     L = list()
     for i in range(dim):
         L.append(list())
         for j in range(dim):
             if i==j:
-                L[i].append(R._one().value)
+                L[i].append(CombinatorialScalarWrapper(prnt._zero().value,parent=prnt))
             else:
-                L[i].append(R._zero().value)
-    return matrix(CombinatorialScalarRing(),dim,L)
+                L[i].append(CombinatorialScalarWrapper(prnt._zero().value,parent=prnt))
+    return mat_space(L)
 
 def matrix_clean_up(mat):
     dim = mat.nrows()
