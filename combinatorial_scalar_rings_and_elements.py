@@ -69,6 +69,8 @@ class CombinatorialScalarRing(Ring):
         return "Combinatorial Scalar Ring"
     def __eq__(self,other):
         return type(other) == type(self)
-    def _zero_element(self):
+    def _zero(self):
         return CombinatorialScalarWrapper(CombinatorialScalar(set()),parent=self)
+    def _one(self):
+        return CombinatorialScalarWrapper(CombinatorialScalar([CombinatorialObject(1,1)]),parent=self)
     Element = CombinatorialScalarWrapper

@@ -167,7 +167,7 @@ def involution_dict(mat):
                         func[(x,y)] = _M.from_dict({i:i})
         return func
         
-def print_involution_dict(func):
+def print_dict_of_maps(func):
     """
     Prints out all involutions from a dictionary of involutions indexed by matrix entries (or other maps).
     """
