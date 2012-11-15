@@ -29,7 +29,6 @@ AUTHORS:
 
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
-from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 from sage.bijectivematrixalgebra.main import fixed_points
 from sage.bijectivematrixalgebra.main import is_SRWP_involution
 from sage.bijectivematrixalgebra.main import is_SPWP_bijection
@@ -65,25 +64,25 @@ class ReductionMaps(SageObject):
             raise ValueError, "The first input must be a Combinatorial Scalar Wrapper"
         elif type(B)!=CombinatorialScalarWrapper:
             raise ValueError, "The second input must be a Combinatorial Scalar Wrapper"
-        elif not(bool(A.value.get_generating_function()==B.value.get_generating_function())):
+        elif not(bool(A.get_generating_function()==B.get_generating_function())):
             raise ValueError, "The generating functions of the scalars are not equal"
         elif type(f)!= FiniteSetMap_Set and type(f) != FiniteSetEndoMap_Set:
             raise ValueError, "The third input must be a map in FiniteSetMaps"
         elif type(f0) != FiniteSetMap_Set and type(f0) != FiniteSetEndoMap_Set:
             raise ValueError, "The fourth input must be a map in FiniteSetMaps"
-        elif set(f.domain()) != A.value:
+        elif set(f.domain()) != set(A):
             raise ValueError, "The third input must have domain of first input"
-        elif set(f0.domain()) != fixed_points(f):
-            raise ValueError, "The fourth input must have domain of fixed points of third input"
-        elif set(f0.image_set())!=B.value:
+        elif set(f0.domain()) != set(fixed_points(f)):
+            raise ValueError, "The fourth input must have domain of fixed points of third the input"
+        elif set(f0.image_set())!=set(B):
             raise ValueError, "The fourth input must have image of second input"
         elif not(is_SRWP_involution(f)):
             raise ValueError, "The third input must be an SRWP involution"
         elif not(is_SPWP_bijection(f0)):
             raise ValueError, "The fourth input must be an SPWP bijection"
         else:
-            self._A = A.value
-            self._B = B.value
+            self._A = A
+            self._B = B
             self._f = f
             self._f0 = f0
 
@@ -154,9 +153,7 @@ class ReductionMaps(SageObject):
                 else:
                     dic_h[elm] = f(elm)
             h = FiniteSetMaps(A).from_dict(dic_h)
-            h0 = FiniteSetMaps(CombinatorialScalar(dic_h0.values()),C).from_dict(dic_h0)
-            A = CombinatorialScalarWrapper(A,parent=CombinatorialScalarRing())
-            C = CombinatorialScalarWrapper(C,parent=CombinatorialScalarRing())
+            h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.values()),C).from_dict(dic_h0)
             return ReductionMaps(A,C,h,h0)
 
     def confluence(self,other=None):
@@ -198,9 +195,7 @@ class ReductionMaps(SageObject):
                     else:
                         x = g(x)
             h = FiniteSetMaps(C).from_dict(dic_h)
-            h0 = FiniteSetMaps(CombinatorialScalar(dic_h0.values()),B).from_dict(dic_h0)
-            C = CombinatorialScalarWrapper(C,parent=CombinatorialScalarRing())
-            B = CombinatorialScalarWrapper(B,parent=CombinatorialScalarRing())
+            h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.values()),B).from_dict(dic_h0)
             return ReductionMaps(C,B,h,h0)
 
 def inverse(func):

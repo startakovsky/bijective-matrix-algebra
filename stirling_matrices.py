@@ -29,7 +29,6 @@ from sage.matrix.all import *
 from sage.combinat.permutation import *
 from sage.combinat.set_partition import *
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
-from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from copy import copy
@@ -38,7 +37,7 @@ from copy import deepcopy
 PermutationOptions(display = 'cycle')
 PermutationOptions(display = 'singleton')
 
-def _stirling1_row(row,dim,prnt):
+def _stirling1_row(row,dim):
     r = list()
     for i in range(dim):
         r.append(set())
@@ -47,10 +46,10 @@ def _stirling1_row(row,dim,prnt):
         t = CombinatorialObject(p,(-1)**(row-len(p.to_cycles())))
         r[len(p.to_cycles())].add(t)
     for j in range(dim):
-        r[j] = CombinatorialScalarWrapper(CombinatorialScalar(r[j]),parent = prnt)
+        r[j] = CombinatorialScalarWrapper(r[j])
     return r
 
-def _stirling2_row(row,dim, prnt):
+def _stirling2_row(row,dim):
     r = list()
     for j in range(dim):
         r.append(set())
@@ -58,15 +57,14 @@ def _stirling2_row(row,dim, prnt):
         t = CombinatorialObject(p,1)
         r[len(p)].add(t)
     for j in range(dim):
-        r[j] = CombinatorialScalarWrapper(CombinatorialScalar(r[j]),parent = prnt)
+        r[j] = CombinatorialScalarWrapper(r[j])
     return r
 
 def _product_row(mat1, mat2, row):
     dim = mat1.nrows()
-    prnt = mat1.matrix_space().base_ring()
     r = list()
     for j in range(dim):
-        C = CombinatorialScalarWrapper(CombinatorialScalar(set()), parent = prnt)
+        C = CombinatorialScalarWrapper(set())
         for k in range(dim):
             C = C + (mat1[row,k]*mat2[k,j])
         r.append(C)
@@ -88,10 +86,9 @@ def Stirling1Matrix(dim):
     Returns Stirling1 Matrix whose entries are Combinatorial Scalars of signed permutations.
     """
     mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
-    prnt = mat_space.base_ring()
     l = list()
     for row in range(dim):
-        l.append(_stirling1_row(row,dim,prnt))
+        l.append(_stirling1_row(row,dim))
     return mat_space(l)
 
 def Stirling2Matrix(dim):
@@ -99,23 +96,23 @@ def Stirling2Matrix(dim):
     Returns Stirling2 Matrix whose entries are Combinatorial Scalars of set partitions.
     """ 
     mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
-    prnt = mat_space.base_ring()
     l = list()
     for row in range(dim):
-        l.append(_stirling2_row(row,dim,prnt))
+        l.append(_stirling2_row(row,dim))
     return mat_space(l)
 
 def matrix_generating_function(m):
     """
     returns the generating function of each scalar as a matrix
     """
+    num_var = 10
     dimx = m.nrows()
     dimy = m.ncols()
     d = dict()
     for x in range(dimx):
         for y in range(dimy):
-            d[(x,y)]=m[x,y].value.get_generating_function()
-    return matrix(RationalField(),d)
+            d[(x,y)]=m[x,y].get_generating_function()
+    return matrix(PolynomialRing(ZZ,['x'+str(i) for i in range(num_var)]),d)
 
 def matrix_remove_row_col(mat,row,col):
     L = list()
@@ -135,9 +132,9 @@ def matrix_determinant(mat):
     S = set()
     for p in P:
         l = list()
-        sgn = CombinatorialScalar([CombinatorialObject(p.signature(),p.signature())])
+        sgn = CombinatorialScalarWrapper([CombinatorialObject(p.signature(),p.signature())])
         for i in range(1,dim+1):
-            l.append(mat[i-1,p(i)-1].value)
+            l.append(mat[i-1,p(i)-1])
         cp = CartesianProduct(sgn,*l)
         for i in cp:
             weight = 1
@@ -146,7 +143,7 @@ def matrix_determinant(mat):
                 sign = sign*elm.get_sign()
                 weight = weight*elm.get_weight()
             S.add(CombinatorialObject(tuple(i),sign,weight))
-    return CombinatorialScalarWrapper(CombinatorialScalar(S),parent = CombinatorialScalarRing())
+    return CombinatorialScalarWrapper(S)
 
 def matrix_combinatorial_adjoint(mat):
     dim = mat.nrows()
@@ -161,10 +158,10 @@ def matrix_combinatorial_adjoint(mat):
             L[i].append(set())
     P = Permutations(dim)
     for p in P:
-        p_comb = CombinatorialScalar([CombinatorialObject(p,p.signature())])
+        p_comb = CombinatorialScalarWrapper([CombinatorialObject(p,p.signature())])
         l = list()
         for i in range(1,dim+1):
-            l.append(mat[p(i)-1,i-1].value)
+            l.append(mat[p(i)-1,i-1])
         #This list will have empty sets, which will yield to an empty cartesian product
         #especially when the matrix input is triangular (except for the identity permutation).
         #We will now iterate through the selected entries in each column
@@ -172,7 +169,7 @@ def matrix_combinatorial_adjoint(mat):
         #to the "missing" element of the tuple described in definition 39.
         for i in range(1,dim+1):
             copy_l = copy(l)
-            copy_l[i-1]=CombinatorialScalar([CombinatorialObject('_',1)])
+            copy_l[i-1]=CombinatorialScalarWrapper([CombinatorialObject('_',1)])
             cp = CartesianProduct(p_comb,*copy_l)
             for tupel in cp:
                 tupel = tuple(tupel)
@@ -186,7 +183,7 @@ def matrix_combinatorial_adjoint(mat):
     for i in range(1,dim+1):
         l = list()
         for j in range(1,dim+1):
-            l.append(CombinatorialScalarWrapper(CombinatorialScalar(L[i][j]),parent=prnt))
+            l.append(CombinatorialScalarWrapper(L[i][j]))
         M.append(l)
     return mat_space(M)
 
@@ -198,9 +195,9 @@ def matrix_identity(dim):
         L.append(list())
         for j in range(dim):
             if i==j:
-                L[i].append(CombinatorialScalarWrapper(prnt._one().value,parent=prnt))
+                L[i].append(prnt._one())
             else:
-                L[i].append(CombinatorialScalarWrapper(prnt._zero().value,parent=prnt))
+                L[i].append(prnt._zero())
     return mat_space(L)
 
 def matrix_clean_up(mat):
@@ -211,13 +208,13 @@ def matrix_clean_up(mat):
     for i in range(dim):
         L.append(list())
         for j in range(dim):
-            L[i].append(CombinatorialScalarWrapper(mat[i,j].value.get_cleaned_up_version(),parent=prnt))
+            L[i].append(CombinatorialScalarWrapper(mat[i,j].get_cleaned_up_version()))
     return mat_space(L)
 
 def matrix_print(mat):
     print "Printing..."
     for i in range(mat.nrows()):
         for j in range(mat.ncols()):
-            print "row " + str(i) + ", column " + str(j) + "; " + str(mat[i,j].value.get_size()) + " elements"
-            mat[i,j].value.print_list()
+            print "row " + str(i) + ", column " + str(j) + "; " + str(mat[i,j].get_size()) + " elements"
+            mat[i,j].print_list()
             print "------------------------------"

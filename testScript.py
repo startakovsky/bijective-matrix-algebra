@@ -2,6 +2,7 @@ from sage.bijectivematrixalgebra.all import *
 
 
 
+
 """
 Test Script
 """
@@ -27,24 +28,25 @@ g.get_size()
 g.is_fully_cancelled()
 g.print_list()
 
+
+
 Ch = CombinatorialObject("Corn",1,[0,0,0,0,0,0,2]);Ch 
 Dh = CombinatorialObject("Garlic",-1,[1,2]);Dh
 Eh = CombinatorialObject("Cucumbers",1,[1,2,2]);Eh
 Fh = CombinatorialObject("Blizzard",1,[0]);Fh  
-h = CombinatorialScalar((Ch,Dh,Eh,Fh)); h
 
 R = CombinatorialScalarRing()
-G = CombinatorialScalarWrapper(g, parent=R)
-H = CombinatorialScalarWrapper(h,parent=R)
+G = CombinatorialScalarWrapper(g)
+H = CombinatorialScalarWrapper([Ch,Dh,Eh,Fh])
 
 G+H
 print 'G*H'
 print G*H
 
-n = 4
+dim = 4
 
-m1 = Stirling1Matrix(n)
-m2 = Stirling2Matrix(n)
+m1 = Stirling1Matrix(dim)
+m2 = Stirling2Matrix(dim)
 Ss = matrix_multiply(m2,m1)
 f = bma.involution_dict(Ss)
 bma.print_dict_of_maps(f)

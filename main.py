@@ -26,7 +26,7 @@ from sage.rings.rational_field import RationalField
 from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.sets.set import Set
 from sage.bijectivematrixalgebra.stirling_matrices import matrix_generating_function
-from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
+from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 
 
 def is_bijection(func):
@@ -83,13 +83,13 @@ def fixed_points(func):
     for i in func.domain():
         if func(i) == i:
             S.add(i)
-    return CombinatorialScalar(S)
+    return CombinatorialScalarWrapper(S)
 
 def not_fixed_points(func):
     """
     Returns the Combinatorial Scalar of the non-fixed points of a map.
     """
-    return CombinatorialScalar(set(func.domain()).difference(fixed_points(func)))
+    return CombinatorialScalarWrapper(set(func.domain()).difference(fixed_points(func)))
 
 def restrict_map_fixed(func):
     """
@@ -159,9 +159,9 @@ def involution_dict(mat):
         for x in range(mat.nrows()):
             for y in range(mat.ncols()):
                 if x <> y:
-                    func[(x,y)] = mat[x,y].value.create_involution()
+                    func[(x,y)] = mat[x,y].create_involution()
                 else:
-                    t = mat[x,y].value
+                    t = mat[x,y]
                     for i in t:
                         _M = FiniteSetMaps(t)
                         func[(x,y)] = _M.from_dict({i:i})

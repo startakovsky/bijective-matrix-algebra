@@ -34,30 +34,38 @@ from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScala
 
 
 class CombinatorialScalarWrapper(RingElement):
-    def __init__(self,combin_scalar,parent = None):
-        if parent is None:
-            raise ValueError, "The parent ring must be provided"
-        self.value = combin_scalar
-        RingElement.__init__(self,parent)
+    def __init__(self,_set):
+        RingElement.__init__(self,CombinatorialScalarRing())
+        self.values = CombinatorialScalar(_set)
+        self.iterator = self.__iter__()
+        if self.values != set():
+            self.next = self.iterator.next()
+    def __iter__(self):
+        for this_entry in self.values:
+            yield this_entry
+    def get_set(self):
+        return set(self.values)
+    def get_scalar(self):
+        return self.values
     def __repr__(self):
-        return str(list(self.value))
+        return str(list(self.values))
+    def __getattr__(self,attr):
+        return getattr(self.values,attr)
 
 class CombinatorialScalarWrapper(CombinatorialScalarWrapper):
     """
     TBD
     """
     def __eq__(self,other):
-        return self.value==other.value and self.parent() == other.parent()
+        return self.get_set()==other.get_set() and self.parent() == other.parent()
     def __add__(self,other):
-        s = self.value
-        o = other.value
-        return CombinatorialScalarWrapper(CombinatorialScalar(s.union(o)), parent = self.parent())
+        return CombinatorialScalarWrapper(self.get_set().union(other.get_set()))
     def __mul__(self,other):
         new_set = set()
-        for s in self.value:
-            for o in other.value:
+        for s in self:
+            for o in other:
                 new_set.add(CombinatorialObject((s.get_object(),o.get_object()),s.get_sign()*o.get_sign(),s.get_weight()*o.get_weight()))
-        return CombinatorialScalarWrapper(CombinatorialScalar(new_set), parent = self.parent())
+        return CombinatorialScalarWrapper(new_set)
         
 class CombinatorialScalarRing(Ring):
     """
@@ -70,7 +78,9 @@ class CombinatorialScalarRing(Ring):
     def __eq__(self,other):
         return type(other) == type(self)
     def _zero(self):
-        return CombinatorialScalarWrapper(CombinatorialScalar(set()),parent=self)
+        return CombinatorialScalarWrapper(set())
     def _one(self):
-        return CombinatorialScalarWrapper(CombinatorialScalar([CombinatorialObject(1,1)]),parent=self)
+        return CombinatorialScalarWrapper([CombinatorialObject(1,1)])
+    def _element_constructor_(self,i):
+        return CombinatorialScalarWrapper(i)
     Element = CombinatorialScalarWrapper
