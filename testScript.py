@@ -48,5 +48,3 @@ dim = 4
 m1 = Stirling1Matrix(dim)
 m2 = Stirling2Matrix(dim)
 Ss = matrix_multiply(m2,m1)
-f = bma.involution_dict(Ss)
-bma.print_dict_of_maps(f)

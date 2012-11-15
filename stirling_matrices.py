@@ -24,15 +24,17 @@ AUTHORS:
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
 
-from sage.rings.rational_field import RationalField
+
+from sage.rings.polynomial.polynomial_ring import PolynomialRing_general
 from sage.matrix.all import *
 from sage.combinat.permutation import *
 from sage.combinat.set_partition import *
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
+from sage.bijectivematrixalgebra.reduction_maps_dicts import ReductionMapsDict
+from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from copy import copy
-from copy import deepcopy
 
 PermutationOptions(display = 'cycle')
 PermutationOptions(display = 'singleton')
@@ -115,6 +117,9 @@ def matrix_generating_function(m):
     return matrix(PolynomialRing(ZZ,['x'+str(i) for i in range(num_var)]),d)
 
 def matrix_remove_row_col(mat,row,col):
+    """
+    Return matrix with row, col removed
+    """
     L = list()
     newrows = range(mat.nrows())
     newcols= range(mat.ncols())
@@ -127,6 +132,9 @@ def matrix_remove_row_col(mat,row,col):
     return matrix(mat.parent().base_ring(),len(newrows),len(newcols),L)
 
 def matrix_determinant(mat):
+    """
+    Return determinant scalar
+    """
     dim = mat.nrows()
     P = Permutations(dim)
     S = set()
@@ -146,6 +154,9 @@ def matrix_determinant(mat):
     return CombinatorialScalarWrapper(S)
 
 def matrix_combinatorial_adjoint(mat):
+    """
+    Return Combinatorial Adjoint.
+    """
     dim = mat.nrows()
     M = list()
     mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
@@ -201,6 +212,10 @@ def matrix_identity(dim):
     return mat_space(L)
 
 def matrix_clean_up(mat):
+    """
+    Apply get_cleaned_up_version to each object within
+    each entry and return a cleaned up matrix
+    """
     dim = mat.nrows()
     L = list()
     mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
@@ -211,6 +226,46 @@ def matrix_clean_up(mat):
             L[i].append(CombinatorialScalarWrapper(mat[i,j].get_cleaned_up_version()))
     return mat_space(L)
 
+def matrix_identity_reduction(mat):
+    """
+    When a matrix reduces to the identity, this returns
+    a ReductionMapDict of from a matrix to I.
+    """
+    if matrix_generating_function(mat)!=MatrixSpace(RationalField(),mat.nrows(),mat.ncols()).identity_matrix():
+        raise ValueError, "Input needs to be equivalent to the identity matrix."
+    else:
+        dim = mat.nrows()
+        fs = involution_dict(mat)
+        f0s = dict()
+        I = matrix_identity(dim)
+        for i in range(dim):
+            for j in range(dim):
+                if i==j:
+                    f0s[i,j] = FiniteSetMaps(mat[i,j],I[i,j]).from_dict({mat[i,j].get_set().pop():CombinatorialObject(1,1)})
+                else:
+                    f0s[i,j] = FiniteSetMaps(set()).from_dict({})
+        d = dict()
+        for i in range(dim):
+            for j in range(dim):
+                d[i,j] = ReductionMaps(mat[i,j],I[i,j],fs[i,j],f0s[i,j])
+        return ReductionMapsDict(d," an arbitrary involution")
+
+def matrix_cleaned_up_reduction(mat):
+    dim = mat.nrows()
+    d = dict()
+    clean_mat = matrix_clean_up(mat)
+    for i in range(dim):
+        for j in range(dim):
+                dic_f = dict()
+                dic_f0 = dict()
+                for key in mat[i,j]:
+                    dic_f[key] = key
+                    dic_f0[key]=key.get_cleaned_up_version()
+                f = FiniteSetMaps(mat[i,j]).from_dict(dic_f)
+                f0 = FiniteSetMaps(mat[i,j],clean_mat[i,j]).from_dict(dic_f0)
+                d[i,j] = ReductionMaps(mat[i,j],clean_mat[i,j],f,f0)
+    return ReductionMapsDict(d, "cleaned up scalars")
+
 def matrix_print(mat):
     print "Printing..."
     for i in range(mat.nrows()):
@@ -218,3 +273,24 @@ def matrix_print(mat):
             print "row " + str(i) + ", column " + str(j) + "; " + str(mat[i,j].get_size()) + " elements"
             mat[i,j].print_list()
             print "------------------------------"
+            
+def involution_dict(mat):
+    """
+    Returns a dictionary of arbitrary involutions on the entries of a Combinatorial Matrix.
+    Note all weights must be 1 for this.  It may be extended upon in the future.
+    """
+    mat_gen_func = matrix_generating_function(mat)
+    if mat_gen_func != mat_gen_func.parent().identity_matrix():
+        print "ERROR: Input needs to be equal to the identity."
+    else:
+        func = dict()
+        for x in range(mat.nrows()):
+            for y in range(mat.ncols()):
+                if x <> y:
+                    func[(x,y)] = mat[x,y].create_involution()
+                else:
+                    t = mat[x,y]
+                    for i in t:
+                        _M = FiniteSetMaps(t)
+                        func[(x,y)] = _M.from_dict({i:i})
+        return func

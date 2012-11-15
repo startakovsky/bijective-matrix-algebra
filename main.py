@@ -22,10 +22,8 @@ AUTHORS:
 #*****************************************************************************
 
 from sage.matrix.all import *
-from sage.rings.rational_field import RationalField
 from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.sets.set import Set
-from sage.bijectivematrixalgebra.stirling_matrices import matrix_generating_function
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 
 
@@ -146,35 +144,5 @@ def is_SPWP_bijection(func):
     Returns True if the function is a sign preserving, weight preserving bijection; False otherwise.
     """
     return is_SPWP and is_bijection(func)
-
-def involution_dict(mat):
-    """
-    Returns a dictionary of arbitrary involutions on the entries of a Combinatorial Matrix.
-    Note all weights must be 1 for this.  It may be extended upon in the future.
-    """
-    if matrix_generating_function(mat)!=MatrixSpace(RationalField(),mat.nrows(),mat.ncols()).identity_matrix():
-        print "ERROR: Input needs to be equal to the identity."
-    else:
-        func = dict()
-        for x in range(mat.nrows()):
-            for y in range(mat.ncols()):
-                if x <> y:
-                    func[(x,y)] = mat[x,y].create_involution()
-                else:
-                    t = mat[x,y]
-                    for i in t:
-                        _M = FiniteSetMaps(t)
-                        func[(x,y)] = _M.from_dict({i:i})
-        return func
-        
-def print_dict_of_maps(func):
-    """
-    Prints out all involutions from a dictionary of involutions indexed by matrix entries (or other maps).
-    """
-    for key in sorted(func):
-        print "---------------------------------------"
-        print "row " + str(key[0]) + ", column " + str(key[1]) + ": " + str(len(func[key].domain())) + " elements."
-        for elm in func[key].domain():
-            print str(elm) + " --> " + str(func[key](elm))
             
 

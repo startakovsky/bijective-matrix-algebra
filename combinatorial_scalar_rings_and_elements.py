@@ -1,7 +1,7 @@
 r"""
-Combinatorial Scalar Ring
+Combinatorial Scalar Ring and Ring Element.
 
-See combinatorial_scalars for background.
+The main goal with this is to make a ring out of Combinatorial Scalars with operations such as multiplication and addition and uses a __getattr__ special method to make this behave as a set, and add an iterator.  
 
 The primary purpose of this class is to be able to treat Combinatorial Scalars as entries in a matrix.
 
@@ -54,7 +54,7 @@ class CombinatorialScalarWrapper(RingElement):
 
 class CombinatorialScalarWrapper(CombinatorialScalarWrapper):
     """
-    TBD
+    Defines plus and times operations as well as special equality boolean method.
     """
     def __eq__(self,other):
         return self.get_set()==other.get_set() and self.parent() == other.parent()
