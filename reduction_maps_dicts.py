@@ -86,6 +86,21 @@ class ReductionMapsDict(dict):
     
     def get_dim(self):
         return self._dim
+
+    def reverse(self):
+        dim = self.get_dim()
+        d = dict()
+        for i in range(dim):
+            for j in range(dim):
+                d[i,j] = self[i,j].reverse()
+        return ReductionMapsDict(d)
+
+    def print_involutions(self):
+        for key in sorted(self):
+            print "row: " + str(key[0]) + ", column: " + str(key[1])
+            print self[key]
+            self[key].print_involution()
+            print "***********************************"       
         
     def transitive(self,other):
         """
@@ -107,13 +122,4 @@ class ReductionMapsDict(dict):
         for i in range(dim):
             for j in range(dim):
                 d[i,j] = self.get_reduction_dict()[i,j].confluence(other.get_reduction_dict()[i,j])
-        return ReductionMapsDict(d)
-     
-    def print_dict(self):
-        for key in sorted(self):
-            print "row: " + str(key[0]) + ", column: " + str(key[1])
-            print self[key]
-            func = self[key].get_SRWP()
-            for i in func.domain():
-                print str(i) + ", " + str(i.get_sign()) + " --> " + str(func(i)) + ", " + str(func(i).get_sign())
-            print "***********************************"      
+        return ReductionMapsDict(d)   

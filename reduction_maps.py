@@ -125,6 +125,24 @@ class ReductionMaps(SageObject):
         """
         return self._B
 
+    def print_involution(self):
+        func = self.get_SRWP()
+        for i in func.domain():
+            print str(i) + ", " + str(i.get_sign()) + " --> " + str(func(i)) + ", " + str(func(i).get_sign())
+
+    def reverse(self):
+        if len(self.get_SRWP())>0:
+            raise ValueError, "Reduction direction cannot be reversed unless scalars are equivalent"
+        else:
+            A = self.get_B()
+            B = self.get_A()
+            f0 = _inverse(self.get_SPWP())
+            dic_f = dict()
+            for elm in A:
+                dic_f[elm] = elm
+            f = FiniteSetMaps(A).from_dict(dic_f)
+            return ReductionMaps(A,B,f,f0)
+
     def transitivity(self,other=None):
         """
         TBD
@@ -149,7 +167,7 @@ class ReductionMaps(SageObject):
                         dic_h0[elm] = g0(f0(elm))
                         dic_h[elm] = elm
                     else:
-                        dic_h[elm] = inverse(f0)(g(f0(elm)))
+                        dic_h[elm] = _inverse(f0)(g(f0(elm)))
                 else:
                     dic_h[elm] = f(elm)
             h = FiniteSetMaps(A).from_dict(dic_h)
@@ -181,7 +199,7 @@ class ReductionMaps(SageObject):
             fxd_f = fixed_points(self.get_SRWP())
             fxd_g = fixed_points(other.get_SRWP())
             for c in C:
-                x = inverse(g0)(c)
+                x = _inverse(g0)(c)
                 while True:
                     if x in fxd_f: #a fixed point of h
                         dic_h[c] = c
@@ -198,7 +216,7 @@ class ReductionMaps(SageObject):
             h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.values()),B).from_dict(dic_h0)
             return ReductionMaps(C,B,h,h0)
 
-def inverse(func):
+def _inverse(func):
     dic = func.fibers()
     for i in func.codomain():
         dic[i] = set(dic[i]).pop()
