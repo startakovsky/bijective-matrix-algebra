@@ -73,7 +73,7 @@ def _product_row(mat1, mat2, row):
         r.append(C)
     return r
 
-def _identity_matrix(dim):
+def identity_matrix(dim):
     """
     Returns standard combinatorial identity matrix
     """
@@ -284,7 +284,7 @@ def matrix_identity_reduction(mat):
     dim = mat.nrows()
     fs = _involution_dict(mat)
     f0s = dict()
-    I = _identity_matrix(dim)
+    I = identity_matrix(dim)
     for i in range(dim):
         for j in range(dim):
             if i==j:
