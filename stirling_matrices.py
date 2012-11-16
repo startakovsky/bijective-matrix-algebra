@@ -251,21 +251,22 @@ def matrix_clean_up(mat):
             L[i].append(CombinatorialScalarWrapper(mat[i,j].get_cleaned_up_version()))
     return mat_space(L)
 
-def matrix_cleaned_up_reduction(mat):
+def matrix_clean_up_reduction(mat):
     dim = mat.nrows()
     d = dict()
-    clean_mat = matrix_clean_up(mat)
+    B = matrix_clean_up(mat)
+    A = mat
     for i in range(dim):
         for j in range(dim):
-                dic_f = dict()
-                dic_f0 = dict()
-                for key in mat[i,j]:
-                    dic_f[key] = key
-                    dic_f0[key]=key.get_cleaned_up_version()
-                f = FiniteSetMaps(mat[i,j]).from_dict(dic_f)
-                f0 = FiniteSetMaps(mat[i,j],clean_mat[i,j]).from_dict(dic_f0)
-                d[i,j] = ReductionMaps(mat[i,j],clean_mat[i,j],f,f0)
-    return ReductionMapsDict(d, "cleaned up scalars")
+            dic_f = dict()
+            dic_f0 = dict()
+            for elm in A[i,j]:
+                dic_f[elm] = elm
+                dic_f0[elm] = elm.get_cleaned_up_version()
+            f = FiniteSetMaps(A[i,j]).from_dict(dic_f)
+            f0 = FiniteSetMaps(A[i,j],B[i,j]).from_dict(dic_f0)
+            d[i,j] = ReductionMaps(A[i,j],B[i,j],f,f0)
+    return ReductionMapsDict(d,"clean up")
 
 def matrix_print(mat):
     print "Printing..."
