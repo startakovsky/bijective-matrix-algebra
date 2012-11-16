@@ -32,6 +32,7 @@ from sage.combinat.set_partition import *
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
+from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.bijectivematrixalgebra.reduction_maps_dicts import ReductionMapsDict
 from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from copy import copy
@@ -71,6 +72,43 @@ def _product_row(mat1, mat2, row):
             C = C + (mat1[row,k]*mat2[k,j])
         r.append(C)
     return r
+
+def _identity_matrix(dim):
+    """
+    Returns standard combinatorial identity matrix
+    """
+    mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
+    prnt = mat_space.base_ring()
+    L = list()
+    for i in range(dim):
+        L.append(list())
+        for j in range(dim):
+            if i==j:
+                L[i].append(prnt._one())
+            else:
+                L[i].append(prnt._zero())
+    return mat_space(L)
+
+def _involution_dict(mat):
+    """
+    Returns a dictionary of arbitrary involutions on the entries of a Combinatorial Matrix.
+    Note all weights must be 1 for this.  It may be extended upon in the future.
+    """
+    mat_gen_func = matrix_generating_function(mat)
+    if mat_gen_func != mat_gen_func.parent().identity_matrix():
+        print "ERROR: Input needs to be equal to the identity."
+    else:
+        func = dict()
+        for x in range(mat.nrows()):
+            for y in range(mat.ncols()):
+                if x <> y:
+                    func[(x,y)] = mat[x,y].create_involution()
+                else:
+                    t = mat[x,y]
+                    for i in t:
+                        _M = FiniteSetMaps(t)
+                        func[(x,y)] = _M.from_dict({i:i})
+        return func
 
 def matrix_multiply(mat1,mat2):
     """
@@ -198,19 +236,6 @@ def matrix_combinatorial_adjoint(mat):
         M.append(l)
     return mat_space(M)
 
-def matrix_identity(dim):
-    mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
-    prnt = mat_space.base_ring()
-    L = list()
-    for i in range(dim):
-        L.append(list())
-        for j in range(dim):
-            if i==j:
-                L[i].append(prnt._one())
-            else:
-                L[i].append(prnt._zero())
-    return mat_space(L)
-
 def matrix_clean_up(mat):
     """
     Apply get_cleaned_up_version to each object within
@@ -225,30 +250,6 @@ def matrix_clean_up(mat):
         for j in range(dim):
             L[i].append(CombinatorialScalarWrapper(mat[i,j].get_cleaned_up_version()))
     return mat_space(L)
-
-def matrix_identity_reduction(mat):
-    """
-    When a matrix reduces to the identity, this returns
-    a ReductionMapDict of from a matrix to I.
-    """
-    if matrix_generating_function(mat)!=MatrixSpace(RationalField(),mat.nrows(),mat.ncols()).identity_matrix():
-        raise ValueError, "Input needs to be equivalent to the identity matrix."
-    else:
-        dim = mat.nrows()
-        fs = involution_dict(mat)
-        f0s = dict()
-        I = matrix_identity(dim)
-        for i in range(dim):
-            for j in range(dim):
-                if i==j:
-                    f0s[i,j] = FiniteSetMaps(mat[i,j],I[i,j]).from_dict({mat[i,j].get_set().pop():CombinatorialObject(1,1)})
-                else:
-                    f0s[i,j] = FiniteSetMaps(set()).from_dict({})
-        d = dict()
-        for i in range(dim):
-            for j in range(dim):
-                d[i,j] = ReductionMaps(mat[i,j],I[i,j],fs[i,j],f0s[i,j])
-        return ReductionMapsDict(d," an arbitrary involution")
 
 def matrix_cleaned_up_reduction(mat):
     dim = mat.nrows()
@@ -273,24 +274,24 @@ def matrix_print(mat):
             print "row " + str(i) + ", column " + str(j) + "; " + str(mat[i,j].get_size()) + " elements"
             mat[i,j].print_list()
             print "------------------------------"
-            
-def involution_dict(mat):
+
+def matrix_identity_reduction(mat):
     """
-    Returns a dictionary of arbitrary involutions on the entries of a Combinatorial Matrix.
-    Note all weights must be 1 for this.  It may be extended upon in the future.
+    When a matrix reduces to the identity, this returns
+    a ReductionMapDict of from a matrix to I.
     """
-    mat_gen_func = matrix_generating_function(mat)
-    if mat_gen_func != mat_gen_func.parent().identity_matrix():
-        print "ERROR: Input needs to be equal to the identity."
-    else:
-        func = dict()
-        for x in range(mat.nrows()):
-            for y in range(mat.ncols()):
-                if x <> y:
-                    func[(x,y)] = mat[x,y].create_involution()
-                else:
-                    t = mat[x,y]
-                    for i in t:
-                        _M = FiniteSetMaps(t)
-                        func[(x,y)] = _M.from_dict({i:i})
-        return func
+    dim = mat.nrows()
+    fs = _involution_dict(mat)
+    f0s = dict()
+    I = _identity_matrix(dim)
+    for i in range(dim):
+        for j in range(dim):
+            if i==j:
+                f0s[i,j] = FiniteSetMaps(mat[i,j],I[i,j]).from_dict({mat[i,j].get_set().pop():CombinatorialObject(1,1)})
+            else:
+                f0s[i,j] = FiniteSetMaps(set()).from_dict({})
+    d = dict()
+    for i in range(dim):
+        for j in range(dim):
+            d[i,j] = ReductionMaps(mat[i,j],I[i,j],fs[i,j],f0s[i,j])
+    return ReductionMapsDict(d," an arbitrary involution")

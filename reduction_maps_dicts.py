@@ -31,6 +31,8 @@ from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from sage.functions.other import sqrt
 from sage.matrix.all import *
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
+from copy import copy
+
 
 
 class ReductionMapsDict(dict):
@@ -86,6 +88,9 @@ class ReductionMapsDict(dict):
         return self._dim
         
     def transitive(self,other):
+        """
+        Implement transitivity lemma for matrices
+        """
         dim = self.get_dim()
         d = dict()
         for i in range(dim):
@@ -94,6 +99,9 @@ class ReductionMapsDict(dict):
         return ReductionMapsDict(d)
     
     def confluence(self,other):
+        """
+        Implement confluence lemma for matrices
+        """
         dim = self.get_dim()
         d = dict()
         for i in range(dim):
