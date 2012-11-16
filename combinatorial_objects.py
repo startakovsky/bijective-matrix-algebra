@@ -27,7 +27,6 @@ AUTHORS:
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
 #from sage.rings import *
-#from sage.bijectivematrixalgebra.main import *
 #from sage.structure.unique_representation import UniqueRepresentation
 #from sage.structure.all import SageObject
 from sage.symbolic.expression import Expression

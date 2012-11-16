@@ -2,7 +2,6 @@ from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObjec
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
-import sage.bijectivematrixalgebra.main as bma
 from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from sage.bijectivematrixalgebra.reduction_maps_dicts import ReductionMapsDict
 from sage.bijectivematrixalgebra.stirling_matrices import *

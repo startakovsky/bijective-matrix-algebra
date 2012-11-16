@@ -21,7 +21,6 @@ AUTHORS:
 #                  http://www.gnu.org/licenses/
 #*****************************************************************************
 
-from sage.matrix.all import *
 from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.sets.set import Set
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
@@ -145,4 +144,8 @@ def is_SPWP_bijection(func):
     """
     return is_SPWP and is_bijection(func)
             
-
+def inverse(func):
+    dic = func.fibers()
+    for i in func.codomain():
+        dic[i] = set(dic[i]).pop()
+    return FiniteSetMaps(func.codomain(),func.domain()).from_dict(dic)

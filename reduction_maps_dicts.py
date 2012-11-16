@@ -47,6 +47,7 @@ class ReductionMapsDict(dict):
 
     """
     def __init__(self,dic,repr=None):
+        self._reduction_dic = dic
         for key in dic.keys():
             self[key] = copy(dic[key])
         self._dim = int(sqrt(len(self.keys())))
