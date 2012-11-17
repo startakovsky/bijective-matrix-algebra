@@ -31,6 +31,7 @@ from sage.all import *
 from copy import deepcopy
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
 from sage.bijectivematrixalgebra.combinatorial_scalars import CombinatorialScalar
+from sage.structure.unique_representation import UniqueRepresentation
 
 
 class CombinatorialScalarWrapper(RingElement):
@@ -67,7 +68,7 @@ class CombinatorialScalarWrapper(CombinatorialScalarWrapper):
                 new_set.add(CombinatorialObject((s.get_object(),o.get_object()),s.get_sign()*o.get_sign(),s.get_weight()*o.get_weight()))
         return CombinatorialScalarWrapper(new_set)
         
-class CombinatorialScalarRing(Ring):
+class CombinatorialScalarRing(Ring,UniqueRepresentation):
     """
     TBD
     """
