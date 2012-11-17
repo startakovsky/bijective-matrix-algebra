@@ -296,3 +296,23 @@ def matrix_identity_reduction(mat):
         for j in range(dim):
             d[i,j] = ReductionMaps(mat[i,j],I[i,j],fs[i,j],f0s[i,j])
     return ReductionMapsDict(d," an arbitrary involution")
+
+def matrix_comparison(matA,matB):
+    if matA.ncols()!=matB.ncols() or matA.nrows()!=matB.nrows():
+        raise ValueError, "Check dimensions of input"
+    else:
+        for i in range(dim):
+            for j in range(dim):
+                if mat(A)[i,j]!=matB[i,j]:
+                    return False
+        return True
+        
+def matrix_multiply_scalar(mat,scal):
+    nrows = mat.nrows()
+    ncols = mat.ncols()
+    L = list()
+    for i in range(nrows):
+        L.append(list())
+        for j in range(ncols):
+            L[i].append(scal*mat[i,j])
+    return matrix(CombinatorialScalarRing(),nrows,ncols,L)
