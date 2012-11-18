@@ -4,5 +4,7 @@ from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import 
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from sage.bijectivematrixalgebra.reduction_maps_dicts import ReductionMapsDict
-from sage.bijectivematrixalgebra.stirling_matrices import *
+from sage.bijectivematrixalgebra.matrix_methods import *
+from sage.bijectivematrixalgebra.reduction_methods import *
+from sage.bijectivematrixalgebra.stirling import *
 from sage.bijectivematrixalgebra.testScript import *

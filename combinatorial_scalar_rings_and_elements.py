@@ -57,8 +57,11 @@ class CombinatorialScalarWrapper(CombinatorialScalarWrapper):
     """
     Defines plus and times operations as well as special equality boolean method.
     """
-    def __eq__(self,other):
-        return self.get_set()==other.get_set() and self.parent() == other.parent()
+    def __cmp__(self,other):
+        if self.get_set()==other.get_set() and self.parent() == other.parent():
+            return 0
+        else:
+            return 1
     def __add__(self,other):
         return CombinatorialScalarWrapper(self.get_set().union(other.get_set()))
     def __mul__(self,other):

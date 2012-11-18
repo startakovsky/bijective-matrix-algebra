@@ -29,7 +29,8 @@ AUTHORS:
 
 from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from sage.functions.other import sqrt
-from sage.matrix.all import *
+from sage.matrix.all import matrix
+from sage.matrix.all import MatrixSpace
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from copy import copy
 

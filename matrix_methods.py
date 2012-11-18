@@ -2,7 +2,8 @@ r"""
 
 This file contains the methods used in the Bijective Matrix Algebra package.
 
-It generates the standard combinatorial interpretations of Stirling Matrices and their product.
+It creates all the foundational methods around matrices, including multiplication,
+determinant, adjoint and printing the matrix.
 
 AUTHORS:
 
@@ -26,42 +27,16 @@ AUTHORS:
 
 
 from sage.rings.polynomial.polynomial_ring import PolynomialRing_general
-from sage.matrix.all import *
+from sage.matrix.all import matrix
+from sage.matrix.all import MatrixSpace
 from sage.combinat.permutation import *
-from sage.combinat.set_partition import *
+from sage.combinat.cartesian_product import CartesianProduct
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from sage.sets.finite_set_maps import FiniteSetMaps
-from sage.bijectivematrixalgebra.reduction_maps_dicts import ReductionMapsDict
-from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from copy import copy
 
-PermutationOptions(display = 'cycle')
-PermutationOptions(display = 'singleton')
-
-def _stirling1_row(row,dim):
-    r = list()
-    for i in range(dim):
-        r.append(set())
-    P = Permutations(row)
-    for p in P:
-        t = CombinatorialObject(p,(-1)**(row-len(p.to_cycles())))
-        r[len(p.to_cycles())].add(t)
-    for j in range(dim):
-        r[j] = CombinatorialScalarWrapper(r[j])
-    return r
-
-def _stirling2_row(row,dim):
-    r = list()
-    for j in range(dim):
-        r.append(set())
-    for p in SetPartitions(row):
-        t = CombinatorialObject(p,1)
-        r[len(p)].add(t)
-    for j in range(dim):
-        r[j] = CombinatorialScalarWrapper(r[j])
-    return r
 
 def _product_row(mat1, mat2, row):
     dim = mat1.nrows()
@@ -89,27 +64,6 @@ def identity_matrix(dim):
                 L[i].append(prnt._zero())
     return mat_space(L)
 
-def _involution_dict(mat):
-    """
-    Returns a dictionary of arbitrary involutions on the entries of a Combinatorial Matrix.
-    Note all weights must be 1 for this.  It may be extended upon in the future.
-    """
-    mat_gen_func = matrix_generating_function(mat)
-    if mat_gen_func != mat_gen_func.parent().identity_matrix():
-        print "ERROR: Input needs to be equal to the identity."
-    else:
-        func = dict()
-        for x in range(mat.nrows()):
-            for y in range(mat.ncols()):
-                if x <> y:
-                    func[(x,y)] = mat[x,y].create_involution()
-                else:
-                    t = mat[x,y]
-                    for i in t:
-                        _M = FiniteSetMaps(t)
-                        func[(x,y)] = _M.from_dict({i:i})
-        return func
-
 def matrix_multiply(mat1,mat2):
     """
     Only works for square matrices.
@@ -119,26 +73,6 @@ def matrix_multiply(mat1,mat2):
     l = list()
     for row in range(dim):
         l.append(_product_row(mat1,mat2,row))
-    return mat_space(l)
-
-def Stirling1Matrix(dim):
-    """
-    Returns Stirling1 Matrix whose entries are Combinatorial Scalars of signed permutations.
-    """
-    mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
-    l = list()
-    for row in range(dim):
-        l.append(_stirling1_row(row,dim))
-    return mat_space(l)
-
-def Stirling2Matrix(dim):
-    """
-    Returns Stirling2 Matrix whose entries are Combinatorial Scalars of set partitions.
-    """ 
-    mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
-    l = list()
-    for row in range(dim):
-        l.append(_stirling2_row(row,dim))
     return mat_space(l)
 
 def matrix_generating_function(m):
@@ -251,23 +185,6 @@ def matrix_clean_up(mat):
             L[i].append(CombinatorialScalarWrapper(mat[i,j].get_cleaned_up_version()))
     return mat_space(L)
 
-def matrix_clean_up_reduction(mat):
-    dim = mat.nrows()
-    d = dict()
-    B = matrix_clean_up(mat)
-    A = mat
-    for i in range(dim):
-        for j in range(dim):
-            dic_f = dict()
-            dic_f0 = dict()
-            for elm in A[i,j]:
-                dic_f[elm] = elm
-                dic_f0[elm] = elm.get_cleaned_up_version()
-            f = FiniteSetMaps(A[i,j]).from_dict(dic_f)
-            f0 = FiniteSetMaps(A[i,j],B[i,j]).from_dict(dic_f0)
-            d[i,j] = ReductionMaps(A[i,j],B[i,j],f,f0)
-    return ReductionMapsDict(d,"clean up")
-
 def matrix_print(mat):
     print "Printing..."
     for i in range(mat.nrows()):
@@ -276,34 +193,15 @@ def matrix_print(mat):
             mat[i,j].print_list()
             print "------------------------------"
 
-def matrix_identity_reduction(mat):
-    """
-    When a matrix reduces to the identity, this returns
-    a ReductionMapDict of from a matrix to I.
-    """
-    dim = mat.nrows()
-    fs = _involution_dict(mat)
-    f0s = dict()
-    I = identity_matrix(dim)
-    for i in range(dim):
-        for j in range(dim):
-            if i==j:
-                f0s[i,j] = FiniteSetMaps(mat[i,j],I[i,j]).from_dict({mat[i,j].get_set().pop():CombinatorialObject(1,1)})
-            else:
-                f0s[i,j] = FiniteSetMaps(set()).from_dict({})
-    d = dict()
-    for i in range(dim):
-        for j in range(dim):
-            d[i,j] = ReductionMaps(mat[i,j],I[i,j],fs[i,j],f0s[i,j])
-    return ReductionMapsDict(d," an arbitrary involution")
-
 def matrix_comparison(matA,matB):
+    nrows = matA.nrows()
+    ncols = matB.ncols()
     if matA.ncols()!=matB.ncols() or matA.nrows()!=matB.nrows():
         raise ValueError, "Check dimensions of input"
     else:
-        for i in range(dim):
-            for j in range(dim):
-                if mat(A)[i,j]!=matB[i,j]:
+        for i in range(nrows):
+            for j in range(ncols):
+                if matA[i,j]!=matB[i,j]:
                     return False
         return True
         
