@@ -105,17 +105,19 @@ def matrix_remove_row_col(mat,row,col):
 
 def matrix_determinant(mat):
     """
-    Return determinant scalar
+    Return determinant scalar, the form of which is:
+    (\sigma,a_1,...,a_n) where sign \sigma is sgn(\sigma)
+    and weight \sigma is 1.
     """
     dim = mat.nrows()
     P = Permutations(dim)
     S = set()
     for p in P:
         l = list()
-        sgn = CombinatorialScalarWrapper([CombinatorialObject(p.signature(),p.signature())])
+        p_comb = CombinatorialScalarWrapper([CombinatorialObject(p,p.signature())])
         for i in range(1,dim+1):
             l.append(mat[i-1,p(i)-1])
-        cp = CartesianProduct(sgn,*l)
+        cp = CartesianProduct(p_comb,*l)
         for i in cp:
             weight = 1
             sign = 1
