@@ -172,7 +172,7 @@ class ReductionMaps(SageObject):
                 else:
                     dic_h[elm] = f(elm)
             h = FiniteSetMaps(A).from_dict(dic_h)
-            h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.values()),C).from_dict(dic_h0)
+            h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.keys()),C).from_dict(dic_h0)
             return ReductionMaps(A,C,h,h0)
 
     def confluence(self,other=None):
