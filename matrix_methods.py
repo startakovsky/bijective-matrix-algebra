@@ -208,15 +208,23 @@ def matrix_comparison(matA,matB):
                     return False
         return True
         
-def matrix_multiply_scalar(mat,scal):
-    nrows = mat.nrows()
-    ncols = mat.ncols()
-    L = list()
-    for i in range(nrows):
-        L.append(list())
-        for j in range(ncols):
-            L[i].append(scal*mat[i,j])
-    return matrix(CombinatorialScalarRing(),nrows,ncols,L)
+def matrix_identity_multiply_scalar(scal,nrows,ncols):
+    """
+    Currently this method only returns for
+    the same number of rows and columns.
+    """
+    if nrows!=ncols:
+        raise ValueError, "check dimensions"
+    else:
+        L = list()
+        for i in range(nrows):
+            L.append(list())
+            for j in range(ncols):
+                if i == j:
+                    L[i].append(scal)
+                else:
+                    L[i].append(CombinatorialScalarWrapper(set()))
+        return matrix(CombinatorialScalarRing(),nrows,ncols,L)
 
 def matrix_adjoint_lemma_40(mat):
     """

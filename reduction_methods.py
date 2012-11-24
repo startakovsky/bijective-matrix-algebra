@@ -28,6 +28,7 @@ AUTHORS:
 from sage.bijectivematrixalgebra.matrix_methods import *
 from sage.matrix.all import matrix
 from sage.matrix.all import MatrixSpace
+from sage.combinat.permutation import *
 from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObject
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
@@ -93,4 +94,53 @@ def matrix_identity_reduction(mat, st = None):
     for i in range(dim):
         for j in range(dim):
             d[i,j] = ReductionMaps(mat[i,j],I[i,j],fs[i,j],f0s[i,j])
+    return ReductionMapsDict(d,st)
+
+def matrix_lemma_40_reduction(mat, st = "lemma 40"):
+    """
+    Returns the reduction of mat = adj_A times A
+    to det_A times I.
+    """
+    dim = mat.nrows()
+    d = dict()
+    B = matrix_adjoint_lemma_40(mat)
+    A = mat
+    for i in range(dim):
+        for j in range(dim):
+            dic_f = dict()
+            dic_f0 = dict()
+            copyset = deepcopy(A[i,j].get_set())
+            if i==j:
+                for elm in copyset:
+                    tmp = list(elm.get_object()[0].get_object())
+                    #object is tuple, elements come from the actual tuple, hence double get_object()
+                    index = tmp.index(CombinatorialObject('_',1))
+                    tmp[index]=elm.get_object()[1]
+                    dic_f[elm] = elm
+                    copyelm= deepcopy(elm)
+                    dic_f0[elm] = copyelm.set_object(tuple(tmp))
+                f0 = FiniteSetMaps(A[i,j],B[i,j]).from_dict(dic_f0)
+            else:
+                for elm in copyset:
+                    tmp = list(elm.get_object()[0].get_object())
+                    #object is tuple, elements come from the actual tuple, hence double get_object()
+                    p = tmp[0].get_object()
+                    ii = i+1
+                    jj = j+1
+                    q = Permutation((ii,jj))
+                    pq = q*p #p composed with q
+                    tmp[0] = CombinatorialObject(pq,pq.signature())
+                    elm_range2 = tmp[jj]
+                    tmp[jj] = elm.get_object()[1]
+                    sgn = 1
+                    weight = 1
+                    for flop in tmp:
+                        sgn *= flop.get_sign()
+                        weight *= flop.get_weight()
+                    elm_range1 = CombinatorialObject(tuple(tmp),sgn,weight)
+                    elm_range = CombinatorialObject((elm_range1,elm_range2),elm_range1.get_sign()*elm_range2.get_sign(),elm_range1.get_weight()*elm_range2.get_weight())
+                    dic_f[elm] = elm_range
+                f0 = FiniteSetMaps(set()).from_dict({})
+            f = FiniteSetMaps(A[i,j]).from_dict(dic_f)
+            d[i,j] = ReductionMaps(A[i,j],B[i,j],f,f0)
     return ReductionMapsDict(d,st)
