@@ -68,7 +68,7 @@ class CombinatorialScalarWrapper(CombinatorialScalarWrapper):
         new_set = set()
         for s in self:
             for o in other:
-                new_set.add(CombinatorialObject((s.get_object(),o.get_object()),s.get_sign()*o.get_sign(),s.get_weight()*o.get_weight()))
+                new_set.add(CombinatorialObject((s,o),s.get_sign()*o.get_sign(),s.get_weight()*o.get_weight()))
         return CombinatorialScalarWrapper(new_set)
         
 class CombinatorialScalarRing(Ring,UniqueRepresentation):

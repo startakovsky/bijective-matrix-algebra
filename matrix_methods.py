@@ -36,6 +36,7 @@ from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import 
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from sage.sets.finite_set_maps import FiniteSetMaps
 from copy import copy
+from copy import deepcopy
 
 
 def _product_row(mat1, mat2, row):
@@ -216,3 +217,30 @@ def matrix_multiply_scalar(mat,scal):
         for j in range(ncols):
             L[i].append(scal*mat[i,j])
     return matrix(CombinatorialScalarRing(),nrows,ncols,L)
+
+def matrix_adjoint_lemma_40(mat):
+    """
+    Returns a matrix which is the target in the
+    reduction of adjoint(A) times A to det(A) times I.
+    """
+    if mat.nrows()!=mat.ncols():
+        raise ValueError, "Make sure that this is indeed a Combinatorial Adjoint matrix"
+    else:
+        dim = mat.nrows()
+        L = list()
+        mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
+        for i in range(dim):
+            L.append(list())
+            for j in range(dim):
+                if i==j:
+                    copyset = deepcopy(mat[i,j].get_set())
+                    for elm in copyset:
+                        tmp = list(elm.get_object()[0].get_object()) 
+                        #object is tuple, elements come from the actual tuple, hence double get_object()
+                        index = tmp.index(CombinatorialObject('_',1))
+                        tmp[index]=elm.get_object()[1]
+                        elm.set_object(tuple(tmp))
+                else:
+                    copyset = CombinatorialScalarWrapper(set())
+                L[i].append(CombinatorialScalarWrapper(copyset))
+        return  mat_space(L)
