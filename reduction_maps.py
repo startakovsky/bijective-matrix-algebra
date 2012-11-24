@@ -144,7 +144,7 @@ class ReductionMaps(SageObject):
             f = FiniteSetMaps(A).from_dict(dic_f)
             return ReductionMaps(A,B,f,f0)
 
-    def transitivity(self,other=None):
+    def transitivite(self,other=None):
         """
         TBD
         """
