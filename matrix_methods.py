@@ -50,7 +50,7 @@ def _product_row(mat1, mat2, row):
     return r
 
 def identity_matrix(dim):
-    """
+    r"""
     Returns standard combinatorial identity matrix
     """
     mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
@@ -66,7 +66,7 @@ def identity_matrix(dim):
     return mat_space(L)
 
 def matrix_multiply(mat1,mat2):
-    """
+    r"""
     Only works for square matrices.
     """
     mat_space = mat1.matrix_space()
@@ -77,7 +77,7 @@ def matrix_multiply(mat1,mat2):
     return mat_space(l)
 
 def matrix_generating_function(m):
-    """
+    r"""
     returns the generating function of each scalar as a matrix
     """
     num_var = 10
@@ -90,7 +90,7 @@ def matrix_generating_function(m):
     return matrix(PolynomialRing(ZZ,['x'+str(i) for i in range(num_var)]),d)
 
 def matrix_remove_row_col(mat,row,col):
-    """
+    r"""
     Return matrix with row, col removed
     """
     L = list()
@@ -105,7 +105,7 @@ def matrix_remove_row_col(mat,row,col):
     return matrix(mat.parent().base_ring(),len(newrows),len(newcols),L)
 
 def matrix_determinant(mat):
-    """
+    r"""
     Return determinant scalar, the form of which is:
     (\sigma,a_1,...,a_n) where sign \sigma is sgn(\sigma)
     and weight \sigma is 1.
@@ -129,7 +129,7 @@ def matrix_determinant(mat):
     return CombinatorialScalarWrapper(S)
 
 def matrix_combinatorial_adjoint(mat):
-    """
+    r"""
     Return Combinatorial Adjoint.
     """
     dim = mat.nrows()
@@ -174,7 +174,7 @@ def matrix_combinatorial_adjoint(mat):
     return mat_space(M)
 
 def matrix_clean_up(mat):
-    """
+    r"""
     Apply get_cleaned_up_version to each object within
     each entry and return a cleaned up matrix
     """
@@ -197,6 +197,9 @@ def matrix_print(mat):
             print "------------------------------"
 
 def matrix_comparison(matA,matB):
+    r"""
+    Returns True if matrices are equal.
+    """
     nrows = matA.nrows()
     ncols = matB.ncols()
     if matA.ncols()!=matB.ncols() or matA.nrows()!=matB.nrows():
@@ -209,7 +212,7 @@ def matrix_comparison(matA,matB):
         return True
         
 def matrix_identity_multiply_scalar(scal,nrows,ncols):
-    """
+    r"""
     Currently this method only returns for
     the same number of rows and columns.
     """
@@ -227,7 +230,7 @@ def matrix_identity_multiply_scalar(scal,nrows,ncols):
         return matrix(CombinatorialScalarRing(),nrows,ncols,L)
 
 def matrix_adjoint_lemma_40(mat):
-    """
+    r"""
     Returns a matrix which is the target in the
     reduction of adjoint(A) times A to det(A) times I.
     """

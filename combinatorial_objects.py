@@ -33,7 +33,7 @@ from sage.symbolic.expression import Expression
 from sage.all import *
 
 class CombinatorialObject(SageObject):
-    """
+    r"""
     INPUT:
     - object an instance of the class SageObject
     - sign a number in the set {1,-1}
@@ -66,7 +66,7 @@ class CombinatorialObject(SageObject):
 
     		    
     def __init__(self, object, sign, weight = [0]):
-    	"""
+    	r"""
         Initiates the object and sets monomial list to variable.
         See ``CombinatorialObject`` for full documentation.
         """
@@ -109,37 +109,37 @@ class CombinatorialObject(SageObject):
     	return self._sign
     	
     def get_cleaned_up_version(self):
-		"""
-		Returns a new cleaned up version of this object.
-		Eliminates nested tuples.  Does not change actual object.
-		"""
-		t = deepcopy(self)
-		t.set_object(clean_up_object(self.get_object()))
-		return t
+        r"""
+        Returns a new cleaned up version of this object.
+        Eliminates nested tuples.  Does not change actual object.
+        """
+        t = deepcopy(self)
+        t.set_object(clean_up_object(self.get_object()))
+        return t
 
 def create_variables(n):
-	"""
-	Given an integer n, this method returns the string 'x1,..,xn'
-	"""
-	variables = ''
-	for i in range(n):
-		variables+= 'x' + str(i+1) + ','
-	variables = variables[0:len(variables)-1]
-	return variables
+    r"""
+    Given an integer n, this method returns the string 'x1,..,xn'
+    """
+    variables = ''
+    for i in range(n):
+        variables+= 'x' + str(i+1) + ','
+    variables = variables[0:len(variables)-1]
+    return variables
 
 def assign_weight_monomial(l):
-	"""
-	Returns weight monomial from list l.
-	"""
-	l.append(0) #to handle the case of a power of x1
-	v = var(create_variables(len(l)))
-	monomial = 1
-	for i in range(len(l)):
-		monomial = monomial * v[i]**l[i]
-	return monomial
+    r"""
+    Returns weight monomial from list l.
+    """
+    l.append(0) #to handle the case of a power of x1
+    v = var(create_variables(len(l)))
+    monomial = 1
+    for i in range(len(l)):
+        monomial = monomial * v[i]**l[i]
+    return monomial
 	
 def clean_up_object(l):
-    """
+    r"""
     Returns just the objects inside nested tuples and preserves the order.
     """
     K = list()

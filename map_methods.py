@@ -27,13 +27,13 @@ from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import 
 
 
 def is_bijection(func):
-	"""
+	r"""
 	Returns True if the function is a bijection; False otherwise.
 	"""
 	return func.domain().cardinality() == func.image_set().cardinality()
 
 def is_sign_preserving(func):
-	"""
+	r"""
 	Returns True if the function is sign preserving; False otherwise.
 	"""
 	for i in func.domain():
@@ -42,7 +42,7 @@ def is_sign_preserving(func):
 	return True
 
 def is_sign_reversing(func):
-	"""
+	r"""
 	Returns True if the function is sign reversing; False otherwise.
 	"""
 	for i in func.domain():
@@ -51,7 +51,7 @@ def is_sign_reversing(func):
 	return True
 
 def is_weight_preserving(func):
-	"""
+	r"""
 	Returns True if the function is weight preserving; False otherwise.
 	"""
 	for i in func.domain():
@@ -61,7 +61,7 @@ def is_weight_preserving(func):
 
 			
 def is_involution(func):
-	"""
+	r"""
 	Returns True if the function is an involution; False otherwise.
 	"""
 	if func.domain() != func.codomain():
@@ -73,7 +73,7 @@ def is_involution(func):
 		return True
 
 def fixed_points(func):
-    """
+    r"""
     Returns the Combinatorial Scalar of the fixed points of a map.
     """
     S = set()
@@ -83,13 +83,13 @@ def fixed_points(func):
     return CombinatorialScalarWrapper(S)
 
 def not_fixed_points(func):
-    """
+    r"""
     Returns the Combinatorial Scalar of the non-fixed points of a map.
     """
     return CombinatorialScalarWrapper(set(func.domain()).difference(fixed_points(func)))
 
 def restrict_map_fixed(func):
-    """
+    r"""
     Returns the same map whose domain is restricted to its fixed points.
     """
     fxd = fixed_points(func)
@@ -100,7 +100,7 @@ def restrict_map_fixed(func):
     return M.from_dict(d)
 
 def restrict_map_not_fixed(func):
-    """
+    r"""
     Returns the the same map whose domain is restricted to its non-fixed points.
     """
     not_fxd = not_fixed_points(func)
@@ -111,7 +111,7 @@ def restrict_map_not_fixed(func):
     return M.from_dict(d)
 
 def is_SPWP(func):
-    """
+    r"""
     Returns True if the function is sign preserving and weight preserving; False otherwise.
     """
     if not(is_weight_preserving(func)):
@@ -122,7 +122,7 @@ def is_SPWP(func):
         return True
 
 def is_SRWP(func):
-    """
+    r"""
     Returns True if the function is sign reversing and weight preserving; False otherwise.
     """
     if not(is_weight_preserving(func)):
@@ -133,13 +133,13 @@ def is_SRWP(func):
         return True
 
 def is_SRWP_involution(func):
-    """
+    r"""
     Returns True if the function is a sign reversing, weight preserving involution; False otherwise.
     """
     return is_SRWP(func) and is_involution(func)
 
 def is_SPWP_bijection(func):
-    """
+    r"""
     Returns True if the function is a sign preserving, weight preserving bijection; False otherwise.
     """
     return is_SPWP and is_bijection(func)

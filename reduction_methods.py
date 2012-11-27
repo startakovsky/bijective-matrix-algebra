@@ -38,7 +38,7 @@ from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from copy import copy
 
 def _involution_dict(mat):
-    """
+    r"""
     Returns a dictionary of arbitrary involutions on the entries of a Combinatorial Matrix.
     Note all weights must be 1 for this.  It may be extended upon in the future.
     """
@@ -76,7 +76,7 @@ def matrix_clean_up_reduction(mat, st="standard clean up"):
     return ReductionMapsDict(d,st)
 
 def matrix_identity_reduction(mat, st = None):
-    """
+    r"""
     When a matrix reduces to the identity, this returns
     a ReductionMapDict of from a matrix to I.
     """
@@ -97,7 +97,7 @@ def matrix_identity_reduction(mat, st = None):
     return ReductionMapsDict(d,st)
 
 def matrix_lemma_40_reduction(mat, st = "lemma 40"):
-    """
+    r"""
     Returns the reduction of mat = adj_A times A
     to det_A times I.
     """

@@ -34,7 +34,7 @@ AUTHORS:
 from sage.all import *
 
 class CombinatorialScalar(set):
-    """
+    r"""
     INPUT:
      - l an iterable consisting of CombinatorialObjects
     
@@ -82,7 +82,7 @@ class CombinatorialScalar(set):
     """
     
     def __init__(self, l):
-        """
+        r"""
         Initiates the object by iterating through the set of combinatorial elements and capturing all relevant information.
         """
         self._sign_dict = dict()
@@ -100,51 +100,53 @@ class CombinatorialScalar(set):
         return "Combinatorial Scalar of cardinality " + str(self._size) + "."
 
     def get_generating_function(self):
-		"""
-		Returns the generating function of the combinatorial scalar.
-		"""
-		return self._generating_function
+        r"""
+        Returns the generating function of the combinatorial scalar.
+        """
+        return self._generating_function
 
     def get_sign_function(self):
-        """
+        r"""
         Returns the sign function of the combinatorial scalar.
         """
         M = FiniteSetMaps(self,(-1,1))
         return M.from_dict(self._sign_dict)
         
     def get_weight_function(self):
-		"""
-		Returns the weight function of the combinatorial scalar.
-		"""
-		M = FiniteSetMaps(self,self._weight_dict.viewvalues())
-		return M.from_dict(self._weight_dict)
+        r"""
+        Returns the weight function of the combinatorial scalar.
+        """
+        M = FiniteSetMaps(self,self._weight_dict.viewvalues())
+        return M.from_dict(self._weight_dict)
 		
     def get_size(self):
-		"""
-		Returns the cardinality of the combinatorial scalar.
-		"""
-		return self._size
+        r"""
+        Returns the cardinality of the combinatorial scalar.
+        """
+        return self._size
 		
     def is_fully_cancelled(self):
-		"""
-		Returns 'True' if the combinatorial scalar is fully cancelled; 'False' otherwise.
-		"""
-		positive_set = set()
-		negative_set = set()
-		for i in self:
-			if i.get_sign()==1:
-				positive_set.add(i.get_weight())
-			else:
-				negative_set.add(i.get_weight())
-		if positive_set.intersection(negative_set).issubset(()):
-			return True
-		else:
-			return False
+        r"""
+        Returns 'True' if the combinatorial scalar is fully cancelled;
+        'False' otherwise.
+        """
+        positive_set = set()
+        negative_set = set()
+        for i in self:
+	    if i.get_sign()==1:
+                positive_set.add(i.get_weight())
+            else:
+                negative_set.add(i.get_weight())
+        if positive_set.intersection(negative_set).issubset(()):
+            return True
+        else:
+            return False
 	
     def create_involution(self):
-    	"""
+    	r"""
     	Returns an arbitrary sign-reversing involution.
-    	WARNING: Should only be used in cases where there are an equal number of positive and negative elements.
+    	WARNING: Should only be used in cases where there 
+        are an equal number of positive and negative elements.
     	"""
         pos = set()
         neg = set()
@@ -162,19 +164,19 @@ class CombinatorialScalar(set):
         return M.from_dict(d)
 	
     def print_list(self):
-		"""
+        r"""
         Prints out the details of all objects in Combinatorial Scalar.
-		"""
-		for i in self:
-			print i.get_detail()
-	
+        """
+        for i in self:
+            print i.get_detail()
+
     def get_cleaned_up_version(self):
-	    """
-	    Cleans up combinatorial scalars whose elements are nested tuples.
-	    This may be called after multiplication occurs.
-	    """
-	    s = set()
-	    for i in self:
-	        s.add(i.get_cleaned_up_version())
-	    return CombinatorialScalar(s)
+        r"""
+        Cleans up combinatorial scalars whose elements are nested tuples.
+        This may be called after multiplication occurs.
+        """
+        s = set()
+        for i in self:
+            s.add(i.get_cleaned_up_version())
+        return CombinatorialScalar(s)
 	

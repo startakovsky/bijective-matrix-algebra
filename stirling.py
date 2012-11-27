@@ -61,7 +61,7 @@ def _stirling2_row(row,dim):
 
 
 def Stirling1Matrix(dim):
-    """
+    r"""
     Returns Stirling1 Matrix whose entries are Combinatorial Scalars of signed permutations.
     """
     mat_space = MatrixSpace(CombinatorialScalarRing(),dim)
@@ -71,7 +71,7 @@ def Stirling1Matrix(dim):
     return mat_space(l)
 
 def Stirling2Matrix(dim):
-    """
+    r"""
     Returns Stirling2 Matrix whose entries are Combinatorial Scalars of set partitions.
     """ 
     mat_space = MatrixSpace(CombinatorialScalarRing(),dim)

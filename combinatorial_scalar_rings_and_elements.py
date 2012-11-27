@@ -54,7 +54,7 @@ class CombinatorialScalarWrapper(RingElement):
         return getattr(self.values,attr)
 
 class CombinatorialScalarWrapper(CombinatorialScalarWrapper):
-    """
+    r"""
     Defines plus and times operations as well as special equality boolean method.
     """
     def __cmp__(self,other):
@@ -72,7 +72,7 @@ class CombinatorialScalarWrapper(CombinatorialScalarWrapper):
         return CombinatorialScalarWrapper(new_set)
         
 class CombinatorialScalarRing(Ring,UniqueRepresentation):
-    """
+    r"""
     TBD
     """
     def __init__(self):

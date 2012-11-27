@@ -43,7 +43,7 @@ from copy import copy
 
 
 class ReductionMaps(SageObject):
-    """
+    r"""
     INPUT:
      - A a Combinatorial Scalar
      - B a Combinatorial Scalar
@@ -57,7 +57,7 @@ class ReductionMaps(SageObject):
 
     """
     def __init__(self, A,B,f,f0):
-        """
+        r"""
         TBD
         """
         
@@ -103,25 +103,25 @@ class ReductionMaps(SageObject):
         return "This represents the reduction of " + str(list(self._A)) + " to " + str(list(self._B)) + "."
 
     def get_SRWP(self):
-        """
+        r"""
         TBD
         """
         return self._f
 
     def get_SPWP(self):
-        """
+        r"""
         TBD
         """
         return self._f0
 
     def get_A(self):
-        """
+        r"""
         TBD
         """
         return self._A
 
     def get_B(self):
-        """
+        r"""
         TBD
         """
         return self._B
@@ -145,7 +145,7 @@ class ReductionMaps(SageObject):
             return ReductionMaps(A,B,f,f0)
 
     def transitive(self,other=None):
-        """
+        r"""
         TBD
         """
         if other is None:
@@ -176,7 +176,7 @@ class ReductionMaps(SageObject):
             return ReductionMaps(A,C,h,h0)
 
     def confluence(self,other=None):
-        """
+        r"""
         Returns the reduction of C to B, where the usage is:
         r1.confluence(r2), and r1 maps A to B, B fully cancelled,
         and r2 maps A to C.

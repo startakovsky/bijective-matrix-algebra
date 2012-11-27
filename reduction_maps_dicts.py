@@ -37,7 +37,7 @@ from copy import copy
 
 
 class ReductionMapsDict(dict):
-    """
+    r"""
     INPUT:
      - d a square dictionary with ordered pairs as keys and ReductionMaps as values
     
@@ -105,7 +105,7 @@ class ReductionMapsDict(dict):
             print "***********************************"       
         
     def transitive(self,other):
-        """
+        r"""
         Implement transitivity lemma for matrices
         """
         dim = self.get_dim()
@@ -116,7 +116,7 @@ class ReductionMapsDict(dict):
         return ReductionMapsDict(d)
     
     def confluence(self,other):
-        """
+        r"""
         Implement confluence lemma for matrices
         """
         dim = self.get_dim()
