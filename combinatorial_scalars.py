@@ -156,7 +156,7 @@ class CombinatorialScalar(set):
                 pos.add(elm)
             else:
                 neg.add(elm)
-        M = FiniteSetMaps(self)
+        M = FiniteSetMaps(self,self)
         for elm in pos:
             a = neg.pop()
             d[elm] = a

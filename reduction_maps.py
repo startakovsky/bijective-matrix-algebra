@@ -141,7 +141,7 @@ class ReductionMaps(SageObject):
             dic_f = dict()
             for elm in A:
                 dic_f[elm] = elm
-            f = FiniteSetMaps(A).from_dict(dic_f)
+            f = FiniteSetMaps(A,A).from_dict(dic_f)
             return ReductionMaps(A,B,f,f0)
 
     def transitive(self,other=None):
@@ -171,7 +171,7 @@ class ReductionMaps(SageObject):
                         dic_h[elm] = inverse(f0)(g(f0(elm)))
                 else:
                     dic_h[elm] = f(elm)
-            h = FiniteSetMaps(A).from_dict(dic_h)
+            h = FiniteSetMaps(A,A).from_dict(dic_h)
             h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.keys()),C).from_dict(dic_h0)
             return ReductionMaps(A,C,h,h0)
 
@@ -213,6 +213,6 @@ class ReductionMaps(SageObject):
                         break
                     else:
                         x = g(x)
-            h = FiniteSetMaps(C).from_dict(dic_h)
+            h = FiniteSetMaps(C,C).from_dict(dic_h)
             h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.values()),B).from_dict(dic_h0)
             return ReductionMaps(C,B,h,h0)

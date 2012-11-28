@@ -58,7 +58,7 @@ def _involution_dict(mat):
                         func[(x,y)] = _M.from_dict({i:i})
         return func
 
-def matrix_clean_up_reduction(mat, st="standard clean up"):
+def reduction_matrix_clean_up(mat, st="standard clean up"):
     dim = mat.nrows()
     d = dict()
     B = matrix_clean_up(mat)
@@ -70,15 +70,16 @@ def matrix_clean_up_reduction(mat, st="standard clean up"):
             for elm in A[i,j]:
                 dic_f[elm] = elm
                 dic_f0[elm] = elm.get_cleaned_up_version()
-            f = FiniteSetMaps(A[i,j]).from_dict(dic_f)
+            f = FiniteSetMaps(A[i,j],A[i,j]).from_dict(dic_f)
             f0 = FiniteSetMaps(A[i,j],B[i,j]).from_dict(dic_f0)
             d[i,j] = ReductionMaps(A[i,j],B[i,j],f,f0)
     return ReductionMapsDict(d,st)
 
-def matrix_identity_reduction(mat, st = None):
+def reduction_identity_matrix(mat, st = None):
     r"""
     When a matrix reduces to the identity, this returns
     a ReductionMapDict of from a matrix to I.
+    This should be used when creating arbitrary SRWP involutions.
     """
     dim = mat.nrows()
     fs = _involution_dict(mat)
@@ -89,14 +90,14 @@ def matrix_identity_reduction(mat, st = None):
             if i==j:
                 f0s[i,j] = FiniteSetMaps(mat[i,j],I[i,j]).from_dict({mat[i,j].get_set().pop():CombinatorialObject(1,1)})
             else:
-                f0s[i,j] = FiniteSetMaps(set()).from_dict({})
+                f0s[i,j] = FiniteSetMaps(set(),set()).from_dict({})
     d = dict()
     for i in range(dim):
         for j in range(dim):
             d[i,j] = ReductionMaps(mat[i,j],I[i,j],fs[i,j],f0s[i,j])
     return ReductionMapsDict(d,st)
 
-def matrix_lemma_40_reduction(mat, st = "lemma 40"):
+def reduction_lemma_40(mat, st = "lemma 40"):
     r"""
     Returns the reduction of mat = adj_A times A
     to det_A times I.
