@@ -89,13 +89,13 @@ class ReductionMapsDict(dict):
     def get_dim(self):
         return self._dim
 
-    def reverse(self):
+    def reverse(self,repr=None):
         dim = self.get_dim()
         d = dict()
         for i in range(dim):
             for j in range(dim):
                 d[i,j] = self[i,j].reverse()
-        return ReductionMapsDict(d)
+        return ReductionMapsDict(d,repr)
 
     def print_involutions(self):
         for key in sorted(self):
@@ -104,7 +104,7 @@ class ReductionMapsDict(dict):
             self[key].print_involution()
             print "***********************************"       
         
-    def transitive(self,other):
+    def transitive(self,other,repr=None):
         r"""
         Implement transitivity lemma for matrices
         """
@@ -113,9 +113,9 @@ class ReductionMapsDict(dict):
         for i in range(dim):
             for j in range(dim):
                 d[i,j] = self.get_reduction_dict()[i,j].transitive(other.get_reduction_dict()[i,j])
-        return ReductionMapsDict(d)
+        return ReductionMapsDict(d,repr)
     
-    def confluence(self,other):
+    def confluence(self,other,repr=None):
         r"""
         Implement confluence lemma for matrices
         """
@@ -124,4 +124,4 @@ class ReductionMapsDict(dict):
         for i in range(dim):
             for j in range(dim):
                 d[i,j] = self.get_reduction_dict()[i,j].confluence(other.get_reduction_dict()[i,j])
-        return ReductionMapsDict(d)   
+        return ReductionMapsDict(d,repr)   

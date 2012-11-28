@@ -145,3 +145,28 @@ def reduction_lemma_40(mat, st = "lemma 40"):
             f = FiniteSetMaps(A[i,j]).from_dict(dic_f)
             d[i,j] = ReductionMaps(A[i,j],B[i,j],f,f0)
     return ReductionMapsDict(d,st)
+
+def reduction_matrix_AIB_AB(mat,st = "remove middle Identity matrix"):
+    if mat.nrows()!=mat.ncols():
+        raise ValueError, "Check dimensions"
+    else:
+        dim = mat.nrows()
+        d = dict()
+        for i in range(dim):
+            for j in range(dim):
+                dic_f0 = dict()
+                dic_f = dict()
+                newset = set()
+                for elm in mat[i,j]:
+                    newelm0 = elm.get_object()[0]
+                    newelm1 = elm.get_object()[1].get_object()[1]
+                    newelm0 = CombinatorialScalarWrapper([newelm0])
+                    newelm1 = CombinatorialScalarWrapper([newelm1])
+                    tmp = (newelm0*newelm1).get_set().pop()
+                    newset.add(tmp)
+                    dic_f[elm] = elm
+                    dic_f0[elm] = tmp
+                f = FiniteSetMaps(mat[i,j],mat[i,j]).from_dict(dic_f)
+                f0 = FiniteSetMaps(mat[i,j],newset).from_dict(dic_f0)
+                d[i,j] = ReductionMaps(mat[i,j],CombinatorialScalarWrapper(newset),f,f0)
+        return ReductionMapsDict(d,st)
