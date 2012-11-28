@@ -1,5 +1,4 @@
-r"""
-Combinatorial Objects
+r""" Combinatorial Objects
 
 Combinatorial Objects are the elements of Combinatorial Scalars.
 
@@ -114,8 +113,7 @@ class CombinatorialObject(SageObject):
         Eliminates nested tuples.  Does not change actual object.
         """
         t = deepcopy(self)
-        t.set_object(clean_up_object(self.get_object()))
-        return t
+        return CombinatorialObject(clean_up_object(t),self.get_sign(),self.get_weight())
 
 def create_variables(n):
     r"""
@@ -142,13 +140,15 @@ def clean_up_object(l):
     r"""
     Returns just the objects inside nested tuples and preserves the order.
     """
+    sign = l.get_sign()
+    weight = l.get_weight()
     K = list()
-    if type(l)==tuple:
-        for i in range(len(l)):
-            if type(l[i]) == tuple:
-                K.extend(clean_up_object(l[i]))
+    if type(l.get_object())==tuple:
+        for i in range(len(l.get_object())):
+            if type(l.get_object()[i].get_object()) == tuple:
+                K.extend(clean_up_object(l.get_object()[i]))
             else:
-                K.append(l[i])
+                K.append(l.get_object()[i])
         return tuple(K)
     else:
         return l
