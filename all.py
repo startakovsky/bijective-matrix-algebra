@@ -8,4 +8,3 @@ from sage.bijectivematrixalgebra.matrix_methods import *
 from sage.bijectivematrixalgebra.reduction_methods import *
 from sage.bijectivematrixalgebra.stirling import *
 from sage.bijectivematrixalgebra.testScript import *
-from sage.bijectivematrixalgebra.map_methods import fixed_points #can delete later

@@ -170,6 +170,29 @@ def reduction_matrix_AIB_AB(mat,st = "remove middle Identity matrix"):
                 d[i,j] = ReductionMaps(mat[i,j],CombinatorialScalarWrapper(newset),f,f0)
         return ReductionMapsDict(d,st)
 
+def reduction_matrix_IAB_AB(mat,st = "remove left Identity matrix"):
+    if mat.nrows()!=mat.ncols():
+        raise ValueError, "Check dimensions"
+    else:
+        dim = mat.nrows()
+        d = dict()
+        for i in range(dim):
+            for j in range(dim):
+                dic_f0 = dict()
+                dic_f = dict()
+                newset = set()
+                for elm in mat[i,j]:
+                    newelm1 = elm.get_object()[1]
+                    newelm2 = elm.get_object()[2]
+                    tmp = newelm1*newelm2
+                    newset.add(tmp)
+                    dic_f[elm] = elm
+                    dic_f0[elm] = tmp
+                f = FiniteSetMaps(mat[i,j],mat[i,j]).from_dict(dic_f)
+                f0 = FiniteSetMaps(mat[i,j],newset).from_dict(dic_f0)
+                d[i,j] = ReductionMaps(mat[i,j],CombinatorialScalarWrapper(newset),f,f0)
+        return ReductionMapsDict(d,st)
+
 def reduction_matrix_ABCD_to_ApBCpD(A,B,C,D,st = None):
     r"""
     returns the reduction/equivalence of the product
@@ -268,6 +291,45 @@ def reduction_lemma_28_23(mat, red_AB_to_I, st = "an application of lemma 28, re
                 dic_f[elm] = CombinatorialObject((tmp0,tmp,tmp2),sign,weight)
                 if tmp1 in fixed_points(f_row_col):
                     tmpfxd = CombinatorialObject((tmp0,f0_row_col(tmp1),tmp2),elm.get_sign(),elm.get_weight())
+                    dic_f0[elm] = tmpfxd
+                    newset.add(tmpfxd)
+            f = FiniteSetMaps(mat[i,j],mat[i,j]).from_dict(dic_f)
+            f0 = FiniteSetMaps(dic_f0.keys(),newset).from_dict(dic_f0)
+            d[i,j] = ReductionMaps(mat[i,j],CombinatorialScalarWrapper(newset),f,f0)
+    return ReductionMapsDict(d,st)
+
+def reduction_lemma_28_68(mat, red_adjAA_to_I, st = "an application of lemma 28, reduction_68"):
+    r"""
+    Because only one matrix here has a nontrivial SRWP map,
+    we need not apply the formal indexing given in the proof
+    of lemma 28.  Simply enter a matrix (adj_AA)BA and the
+    reduction of adj_AA to I.
+    """
+    d = dict()
+    dim = mat.nrows()
+    for i in range(dim):
+        for j in range(dim):
+            dic_f = dict()
+            dic_f0 = dict()
+            newset = set()
+            for elm in mat[i,j]:
+                #break tuple apart
+                tmp0 = elm.get_object()[0]
+                tmp1 = elm.get_object()[1]
+                tmp2 = elm.get_object()[2]
+                #find correct row,col from AB
+                #this is important since it depends on what A and B are
+                row = list(tmp0.get_object()[0].get_object()).index(CombinatorialObject("_",1))-1
+                col = len(tmp0.get_object()[1].get_object())
+                f_row_col = red_adjAA_to_I[row,col].get_SRWP()
+                f0_row_col = red_adjAA_to_I[row,col].get_SPWP()
+                #assign map
+                tmp = f_row_col(tmp0)
+                sign = tmp.get_sign()*tmp1.get_sign()*tmp2.get_sign()
+                weight = tmp.get_weight()*tmp1.get_weight()*tmp2.get_weight()
+                dic_f[elm] = CombinatorialObject((tmp,tmp1,tmp2),sign,weight)
+                if tmp in fixed_points(f_row_col):
+                    tmpfxd = CombinatorialObject((f0_row_col(tmp0),tmp1,tmp2),elm.get_sign(),elm.get_weight())
                     dic_f0[elm] = tmpfxd
                     newset.add(tmpfxd)
             f = FiniteSetMaps(mat[i,j],mat[i,j]).from_dict(dic_f)
