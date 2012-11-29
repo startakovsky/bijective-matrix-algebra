@@ -87,6 +87,9 @@ class CombinatorialObject(SageObject):
         else:
             return 0
 
+    def __mul__(self,other):
+        return CombinatorialObject((self,other),self.get_sign()*other.get_sign(),self.get_weight()*other.get_weight())
+
     def __hash__(self):
         return hash(self.get_tuple())
         

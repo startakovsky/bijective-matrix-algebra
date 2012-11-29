@@ -214,5 +214,5 @@ class ReductionMaps(SageObject):
                     else:
                         x = g(x)
             h = FiniteSetMaps(C,C).from_dict(dic_h)
-            h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.values()),B).from_dict(dic_h0)
+            h0 = FiniteSetMaps(CombinatorialScalarWrapper(dic_h0.keys()),B).from_dict(dic_h0)
             return ReductionMaps(C,B,h,h0)

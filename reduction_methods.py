@@ -159,13 +159,9 @@ def reduction_matrix_AIB_AB(mat,st = "remove middle Identity matrix"):
                 dic_f = dict()
                 newset = set()
                 for elm in mat[i,j]:
-                    if elm.get_object()[1] != CombinatorialObject(1,1):
-                        raise ValueError, "Make sure input matrix is of the form AIB"
                     newelm0 = elm.get_object()[0]
                     newelm1 = elm.get_object()[2]
-                    newelm0 = CombinatorialScalarWrapper([newelm0])
-                    newelm1 = CombinatorialScalarWrapper([newelm1])
-                    tmp = (newelm0*newelm1).get_set().pop()
+                    tmp = newelm0*newelm1
                     newset.add(tmp)
                     dic_f[elm] = elm
                     dic_f0[elm] = tmp
