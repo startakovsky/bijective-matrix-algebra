@@ -33,6 +33,7 @@ from sage.bijectivematrixalgebra.combinatorial_objects import CombinatorialObjec
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarWrapper
 from sage.bijectivematrixalgebra.combinatorial_scalar_rings_and_elements import CombinatorialScalarRing
 from sage.sets.finite_set_maps import FiniteSetMaps
+from sage.bijectivematrixalgebra.map_methods import fixed_points
 from sage.bijectivematrixalgebra.reduction_maps_dicts import ReductionMapsDict
 from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
 from copy import copy
@@ -141,8 +142,8 @@ def reduction_lemma_40(mat, st = "lemma 40"):
                     elm_range1 = CombinatorialObject(tuple(tmp),sgn,weight)
                     elm_range = CombinatorialObject((elm_range1,elm_range2),elm_range1.get_sign()*elm_range2.get_sign(),elm_range1.get_weight()*elm_range2.get_weight())
                     dic_f[elm] = elm_range
-                f0 = FiniteSetMaps(set()).from_dict({})
-            f = FiniteSetMaps(A[i,j]).from_dict(dic_f)
+                f0 = FiniteSetMaps(set(),set()).from_dict({})
+            f = FiniteSetMaps(A[i,j],A[i,j]).from_dict(dic_f)
             d[i,j] = ReductionMaps(A[i,j],B[i,j],f,f0)
     return ReductionMapsDict(d,st)
 
@@ -158,8 +159,10 @@ def reduction_matrix_AIB_AB(mat,st = "remove middle Identity matrix"):
                 dic_f = dict()
                 newset = set()
                 for elm in mat[i,j]:
+                    if elm.get_object()[1] != CombinatorialObject(1,1):
+                        raise ValueError, "Make sure input matrix is of the form AIB"
                     newelm0 = elm.get_object()[0]
-                    newelm1 = elm.get_object()[1].get_object()[1]
+                    newelm1 = elm.get_object()[2]
                     newelm0 = CombinatorialScalarWrapper([newelm0])
                     newelm1 = CombinatorialScalarWrapper([newelm1])
                     tmp = (newelm0*newelm1).get_set().pop()
@@ -170,3 +173,111 @@ def reduction_matrix_AIB_AB(mat,st = "remove middle Identity matrix"):
                 f0 = FiniteSetMaps(mat[i,j],newset).from_dict(dic_f0)
                 d[i,j] = ReductionMaps(mat[i,j],CombinatorialScalarWrapper(newset),f,f0)
         return ReductionMapsDict(d,st)
+
+def reduction_matrix_ABCD_to_ApBCpD(A,B,C,D,st = None):
+    r"""
+    returns the reduction/equivalence of the product
+    of ABCD to A(BC)D.
+    """
+    mat = matrix_multiply(A,matrix_multiply(matrix_multiply(B,C),D))
+    dim = mat.nrows()
+    d = dict()
+    for i in range(dim):
+        for j in range(dim):
+            newsetA = set()
+            newsetB = set()
+            dic_f = dict()
+            dic_f0 = dict()
+            for elm in mat[i,j]:
+                tmp0 = elm.get_object()[0]
+                tmp1 = elm.get_object()[1].get_object()[0]
+                tmp2 = elm.get_object()[1].get_object()[1]
+                tmpB = CombinatorialObject((tmp0,tmp1,tmp2),elm.get_sign(),elm.get_weight())
+                newsetB.add(tmpB)
+                tmp10 = tmp1.get_object()[0]
+                tmp11 = tmp1.get_object()[1]
+                tmpA = CombinatorialObject((tmp0,tmp10,tmp11,tmp2),elm.get_sign(),elm.get_weight())
+                newsetA.add(tmpA)
+                dic_f[tmpA] = tmpA
+                dic_f0[tmpA] = tmpB
+            f = FiniteSetMaps(newsetA,newsetA).from_dict(dic_f)
+            f0 = FiniteSetMaps(newsetA,newsetB).from_dict(dic_f0)
+            d[i,j] = ReductionMaps(CombinatorialScalarWrapper(newsetA),CombinatorialScalarWrapper(newsetB),f,f0)
+    return ReductionMapsDict(d,st)
+    
+def reduction_matrix_ABCD_to_pABpCD(A,B,C,D,st = None):
+    r"""
+    returns the reduction/equivalence of the product
+    of ABCD to (AB)CD.
+    """
+    mat = matrix_multiply(A,matrix_multiply(matrix_multiply(B,C),D))
+    d = dict()
+    dim = mat.nrows()
+    for i in range(dim):
+        for j in range(dim):
+            newsetA = set()
+            newsetB = set()
+            dic_f = dict()
+            dic_f0 = dict()
+            for elm in mat[i,j]:
+                tmp0 = elm.get_object()[0]
+                tmp1 = elm.get_object()[1].get_object()[0]
+                tmp10 = tmp1.get_object()[0]
+                tmp11 = tmp1.get_object()[1]
+                tmp2 = elm.get_object()[1].get_object()[1]
+                tmp = CombinatorialObject((tmp0,tmp10),tmp0.get_sign()*tmp10.get_sign(),tmp0.get_weight()*tmp10.get_weight())
+                tmpB = CombinatorialObject((tmp,tmp11,tmp2),elm.get_sign(),elm.get_weight())
+                newsetB.add(tmpB)
+                tmpA = CombinatorialObject((tmp0,tmp10,tmp11,tmp2),elm.get_sign(),elm.get_weight())
+                newsetA.add(tmpA)
+                dic_f[tmpA] = tmpA
+                dic_f0[tmpA] = tmpB
+            f = FiniteSetMaps(newsetA,newsetA).from_dict(dic_f)
+            f0 = FiniteSetMaps(newsetA,newsetB).from_dict(dic_f0)
+            d[i,j] = ReductionMaps(CombinatorialScalarWrapper(newsetA),CombinatorialScalarWrapper(newsetB),f,f0)
+    return ReductionMapsDict(d,st)
+
+def reduction_lemma_28_23(mat, red_AB_to_I, st = "an application of lemma 28, reduction_23"):
+    r"""
+    Because only one matrix here has a nontrivial SRWP map,
+    we need not apply the formal indexing given in the proof
+    of lemma 28.  Simply enter a matrix adj_A(AB)A and the 
+    reduction of AB to I.
+    """
+    d = dict()
+    dim = mat.nrows()
+    for i in range(dim):
+        for j in range(dim):
+            dic_f = dict()
+            dic_f0 = dict()
+            newset = set()
+            for elm in mat[i,j]:
+                #break tuple apart
+                tmp0 = elm.get_object()[0]
+                tmp1 = elm.get_object()[1]
+                tmp2 = elm.get_object()[2]
+                #find correct row,col from AB
+                #this is important since it depends on what A and B are
+                row = _set_partition_number(tmp1.get_object()[0].get_object())
+                col = len(tmp1.get_object()[1].get_object().cycle_type())
+                f_row_col = red_AB_to_I[row,col].get_SRWP()
+                f0_row_col = red_AB_to_I[row,col].get_SPWP()
+                #assign map
+                tmp = f_row_col(tmp1)
+                sign = tmp.get_sign()*tmp0.get_sign()*tmp2.get_sign()
+                weight = tmp.get_weight()*tmp0.get_weight()*tmp2.get_weight()
+                dic_f[elm] = CombinatorialObject((tmp0,tmp,tmp2),sign,weight)
+                if tmp1 in fixed_points(f_row_col):
+                    tmpfxd = CombinatorialObject((tmp0,f0_row_col(tmp1),tmp2),elm.get_sign(),elm.get_weight())
+                    dic_f0[elm] = tmpfxd
+                    newset.add(tmpfxd)
+            f = FiniteSetMaps(mat[i,j],mat[i,j]).from_dict(dic_f)
+            f0 = FiniteSetMaps(dic_f0.keys(),newset).from_dict(dic_f0)
+            d[i,j] = ReductionMaps(mat[i,j],CombinatorialScalarWrapper(newset),f,f0)
+    return ReductionMapsDict(d,st)
+
+def _set_partition_number(sp):
+    newset = set([0])
+    for i in sp:
+        newset.add(max(i))
+    return max(newset)

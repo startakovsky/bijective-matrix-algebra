@@ -79,8 +79,13 @@ class CombinatorialObject(SageObject):
     def __repr__(self):
         return str(self._object)
 
-    def __eq__(self,other):
-        return self.get_object() == other.get_object() and bool(self.get_genfunc() == other.get_genfunc())
+    def __cmp__(self,other):
+        if bool(self.get_object() != other.get_object()):
+            return -1
+        elif bool(self.get_genfunc() != other.get_genfunc()):
+            return -1
+        else:
+            return 0
 
     def __hash__(self):
         return hash(self.get_tuple())
