@@ -201,12 +201,15 @@ def reduction_matrix_ABCD_to_ApBCpD(A,B,C,D,st = None):
             d[i,j] = ReductionMaps(CombinatorialScalarWrapper(newsetA),CombinatorialScalarWrapper(newsetB),f,f0)
     return ReductionMapsDict(d,st)
     
-def reduction_matrix_ABCD_to_pABpCD(A,B,C,D,st = None):
+def reduction_matrix_ABCD_to_pABpCD(A,B,C,D,st = None,reduction = None):
     r"""
     returns the reduction/equivalence of the product
     of ABCD to (AB)CD.
     """
-    mat = matrix_multiply(A,matrix_multiply(matrix_multiply(B,C),D))
+    if reduction == None:
+        mat = matrix_multiply(A,matrix_multiply(matrix_multiply(B,C),D))
+    else:
+        mat = reduction.get_matrix_A()
     d = dict()
     dim = mat.nrows()
     for i in range(dim):
