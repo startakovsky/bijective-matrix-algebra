@@ -38,7 +38,7 @@ class LoehrMendes(SageObject):
         if repr == None:
             self._repr = "description missing"
         else:
-            self_repr = repr
+            self._repr = repr
         _dim = A.nrows()
         self._reduction_AB_to_I = red_AB_to_I
         self._A = A
@@ -91,7 +91,15 @@ class LoehrMendes(SageObject):
         return "The Loehr-Mendes Bijection: " + self._repr
 
     def __eq__(self,other):
-        return self.get_confluence_reduction() == other.get_confluence_reduction()
+        if self.get_confluence_reduction() != other.get_confluence_reduction():
+			return False
+        elif self.get_original_reduction() != other.get_original_reduction():
+			return False
+        elif self._A != other._A:
+			return False
+        elif self._B != other._B:
+			return False
+        else: return True
     
     def get_reduction15(self):
         return self._reduction_15
