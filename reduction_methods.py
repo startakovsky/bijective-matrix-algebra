@@ -36,6 +36,7 @@ from sage.sets.finite_set_maps import FiniteSetMaps
 from sage.bijectivematrixalgebra.map_methods import fixed_points
 from sage.bijectivematrixalgebra.reduction_maps_dicts import ReductionMapsDict
 from sage.bijectivematrixalgebra.reduction_maps import ReductionMaps
+import sage.bijectivematrixalgebra.stirling as stirling
 from copy import copy
 
 def _involution_dict(mat):
@@ -148,6 +149,11 @@ def reduction_lemma_40(mat, st = "lemma 40"):
     return ReductionMapsDict(d,st)
 
 def reduction_matrix_AIB_AB(mat,st = "remove middle Identity matrix"):
+    r"""
+    Input AIB and output is AB, that is, we remove the middle 
+    Combinatorial Object 1 from each triple and return only
+    the outside two entries.
+    """
     if mat.nrows()!=mat.ncols():
         raise ValueError, "Check dimensions"
     else:
@@ -171,6 +177,11 @@ def reduction_matrix_AIB_AB(mat,st = "remove middle Identity matrix"):
         return ReductionMapsDict(d,st)
 
 def reduction_matrix_IAB_AB(mat,st = "remove left Identity matrix"):
+    r"""
+    Input IAB and output is AB, that is, we remove the left 
+    Combinatorial Object 1 from each triple and return only
+    the other two entries.
+    """
     if mat.nrows()!=mat.ncols():
         raise ValueError, "Check dimensions"
     else:
@@ -279,9 +290,11 @@ def reduction_lemma_28_23(mat, red_AB_to_I, st = "an application of lemma 28, re
                 tmp1 = elm.get_object()[1]
                 tmp2 = elm.get_object()[2]
                 #find correct row,col from AB
-                #this is important since it depends on what A and B are
-                row = _set_partition_number(tmp1.get_object()[0].get_object())
-                col = len(tmp1.get_object()[1].get_object().cycle_type())
+                #we use the following to determine the row,column of the AB term
+                #row = _set_partition_number(tmp1.get_object()[0].get_object())
+                #col = len(tmp1.get_object()[1].get_object().cycle_type())
+                row = stirling.find_row(tmp1.get_object()[0])
+                col = stirling.find_col(tmp1.get_object()[1])
                 f_row_col = red_AB_to_I[row,col].get_SRWP()
                 f0_row_col = red_AB_to_I[row,col].get_SPWP()
                 #assign map
@@ -317,10 +330,12 @@ def reduction_lemma_28_68(mat, red_adjAA_to_I, st = "an application of lemma 28,
                 tmp0 = elm.get_object()[0]
                 tmp1 = elm.get_object()[1]
                 tmp2 = elm.get_object()[2]
-                #find correct row,col from AB
-                #this is important since it depends on what A and B are
+                #find correct row,col from AB to determine which which involution to apply
+                #to the (adj_AABA)_{i,j} term
+                #we use the following to determine the row,column of the adjAA term
+                #since the lefthand term is always adjA, we seek '_' to find its row origin
                 row = list(tmp0.get_object()[0].get_object()).index(CombinatorialObject("_",1))-1
-                col = len(tmp0.get_object()[1].get_object())
+                col = stirling.find_col(tmp0.get_object()[1])
                 f_row_col = red_adjAA_to_I[row,col].get_SRWP()
                 f0_row_col = red_adjAA_to_I[row,col].get_SPWP()
                 #assign map
@@ -336,9 +351,3 @@ def reduction_lemma_28_68(mat, red_adjAA_to_I, st = "an application of lemma 28,
             f0 = FiniteSetMaps(dic_f0.keys(),newset).from_dict(dic_f0)
             d[i,j] = ReductionMaps(mat[i,j],CombinatorialScalarWrapper(newset),f,f0)
     return ReductionMapsDict(d,st)
-
-def _set_partition_number(sp):
-    newset = set([0])
-    for i in sp:
-        newset.add(max(i))
-    return max(newset)

@@ -80,3 +80,23 @@ def Stirling2Matrix(dim):
         l.append(_stirling2_row(row,dim))
     return mat_space(l)
 
+def find_row(elm):
+    obj = elm.get_object()
+    if type(obj) == Permutation_class:
+        return obj.size()
+    elif type(obj) == type(SetPartitions(0).random_element()):
+        newset = set([0])
+        for i in obj:
+            newset.add(max(i))
+        return max(newset)
+    else:
+        raise ValueError, "This algorithm expects SetPartitions or Permutations"
+
+def find_col(elm):
+    obj = elm.get_object()
+    if type(obj) == Permutation_class:
+        return len(obj.cycle_type())
+    elif type(obj) == type(SetPartitions(0).random_element()):
+        return len(obj)
+    else:
+        raise ValueError, "This algorithm expects SetPartitions or Permutations"

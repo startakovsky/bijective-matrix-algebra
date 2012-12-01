@@ -8,3 +8,4 @@ from sage.bijectivematrixalgebra.matrix_methods import *
 from sage.bijectivematrixalgebra.reduction_methods import *
 from sage.bijectivematrixalgebra.stirling import *
 from sage.bijectivematrixalgebra.testScript import *
+from sage.bijectivematrixalgebra.loehr_mendes import *
