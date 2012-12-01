@@ -112,9 +112,6 @@ class LoehrMendes(SageObject):
     
     def get_original_reduction(self):
         return self._reduction_AB_to_I
-
-    def get_reduction(self):
-        return self._reduction_LoehrMendes
     
     def get_original_left(self):
         return self._A
