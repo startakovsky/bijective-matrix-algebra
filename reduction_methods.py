@@ -56,7 +56,7 @@ def _involution_dict(mat):
                 else:
                     t = mat[x,y]
                     for i in t:
-                        _M = FiniteSetMaps(t)
+                        _M = FiniteSetMaps(t,t)
                         func[(x,y)] = _M.from_dict({i:i})
         return func
 
