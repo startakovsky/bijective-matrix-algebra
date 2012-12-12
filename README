@@ -1,47 +1,44 @@
+This package is almost complete, with the exception of a user guide, which is the intended purpose of this README.
+
+Background and Overview:
+
+The below is a quick overview of this package, though for a thorough background of the mathematics involved, see http://www.sciencedirect.com/science/article/pii/S0024379506000218
+
+This collection of Python files was written so that I, or others, could use some of the algorithms described in "Bijective Matrix Algebra" written by Loehr and Mendes (2006).  In their paper, they explored a kind of abstraction of doing algebra over a multivariate ring of polynomials over the integers.  Specifically, they defined the notion of combinatorial scalars as sets of objects, each of which has a sign and weight (in terms of a monomial with coefficient of 1).  And rather than defining equality of scalars to be set equality, it discusses certain mappings whereby scalars can "reduce" to other scalars (i.e. if their generating functions are the same).
+
+At any rate, their paper concerned the notion of matrix identities where the entries in the matrices are these combinatorial scalars.  The specific identities discussed corresponds to a collection of involutions and bijections showing that the product of matrices A and B, AB reduce to I (identity matrix).  
+
+There are many situations where a combinatorial argument can be given to show that AB reduces to I, but it is unknown whether BA reduces to I.  
+
+In their paper, they describe an deterministic algorithm whereby they construct the maps necessary to show that BA reduces to I, given the set of maps which show that BA reduces to I.
+
+This package contains most of the useful constructs in their paper and can therefore be used to provide insight into certain open problems where a combinatorial argument is given for AB reducing to I, but not for BA reducing to I.
+
+Incidentally, Loehr and Mendes' solved a problem posed by Eğecioğlu and Remmel in 1990 about the Kotska matrix and its inverse in 1990.  There was a combinatorial proof for one ordering but the other was not published until 2006.  
 
 
-GITHUB COMMANDS:
+Problem Statement:
 
-"git add -A" is equivalent to "git add .; git add -u".
+Is this process an involution?
 
-The important point about "git add ." is that it looks at the working tree and adds all those paths to the staged changes if they are either changed or are new and not ignored, it does not stage any 'rm' actions.
+That is, given that AB reduces to I (where a collection of maps are given as a part of using the word "reduces"), if one applies the process outlined in the paper, they get that BA reduces to I (along with newly canonically constructed maps).  Now, if the process is applied once more, will we always get the same collection of maps with which we started?
 
-"git add -u" looks at all the currently tracked files and stages the changes to those files if they are different or if they have been removed. It does not add any new files, it only stages changes to already tracked files.
+Preliminary Results?
 
-"git add -A" is a handy shortcut for doing both.
+There seems to be certain cases where this process falls into a loop after a couple iterations, but it seems that when taking on a specific example of Stirling Matrices using an arbitrary collection of maps, we see that the Loehr-Mendes bijection is not an involution.   
 
-You can test the differences out with something like this:
+More work will be done prior to writing a paper, which will include understanding what how minor changes in the maps showing that AB reduces to I affect the new collection of maps for BA reduces to I.
 
 
-git push origin master
+Technical Stuff: to get this package working on your sage installation:
 
-CHANGES MADE TO VANILLA SAGE INSTALL:
+Add "'sage.bijectivematrixalgebra'," to: devel/sage/setup.py
+Add folder "bijectivematrixalgebra" to: devel/sage/sage
+Add contents of this repository to the "bijectivematrixalgebra" folder.
+Run the sage -b command to build this repository.
 
-installed dvipng because there was an error after installation
 
-Add "'sage.bijectivematrixalgebra'," to the file:
-devel/sage/setup.py
+User Guide:
 
-Add folder "bijectivematrixalgebra" to
-devel/sage/sage
-
-Added the following to lines 145,146 in in /devel/sage/sage/all.py
-	#This is custom code for my bijectivematrixalgebra package
-	from sage.bijectivematrixalgebra.all import *
-
-Run sage -b to build sage with modified source files
-
-Other things I did� this is kind of a MANISFEST� 
-
-Configured Router for port forwarding ssh and ftp
-Downloaded openssh for ssh
-Downloaded vsftpd for ftp
-
-Downloaded sudo apt-get install python-setuptools
-Downloaded easy_install -U sphinx
-� in order to run sphinx-quickstart to create html and tex docstrings of my code.
-
-then make latex OR make html
-Installed tex-extra-dox latex package�.. texlive
-index.rst in/source contains table of contents (toc)
-
+See SampleOutput.txt for a use of some of the basic commands.
+More to come here soon...
