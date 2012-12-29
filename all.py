@@ -9,3 +9,4 @@ from sage.bijectivematrixalgebra.reduction_methods import *
 from sage.bijectivematrixalgebra.stirling import *
 from sage.bijectivematrixalgebra.testScript import *
 from sage.bijectivematrixalgebra.loehr_mendes import *
+from sage.bijectivematrixalgebra.involution_gui_methods import *
