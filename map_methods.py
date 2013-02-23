@@ -136,7 +136,12 @@ def is_SRWP_involution(func):
     r"""
     Returns True if the function is a sign reversing, weight preserving involution; False otherwise.
     """
-    return is_SRWP(func) and is_involution(func)
+    if not(is_involution(func)):
+    	return False
+    elif is_SRWP(func):
+    	return True
+    else:
+    	return False
 
 def is_SPWP_bijection(func):
     r"""
