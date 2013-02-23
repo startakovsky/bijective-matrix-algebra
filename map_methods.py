@@ -64,7 +64,7 @@ def is_involution(func):
 	r"""
 	Returns True if the function is an involution; False otherwise.
 	"""
-	if func.domain() != func.codomain():
+	if func.domain() != func.codomain() and not(is_bijection(func)):
 		return False
 	else:
 		for i in func.domain():
