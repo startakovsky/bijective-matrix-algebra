@@ -86,7 +86,7 @@ def reduction_identity_matrix(mat, fs = None, st = None):
     """
     dim = mat.nrows()
     if fs == None:
-		fs = _involution_dict(mat)
+        fs = _involution_dict(mat)
     f0s = dict()
     I = identity_matrix(dim)
     for i in range(dim):
