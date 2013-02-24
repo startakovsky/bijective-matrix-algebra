@@ -85,8 +85,8 @@ def reduction_identity_matrix(mat, fs = None, st = None):
     or supplying one's own in the form of a dictionary.
     """
     dim = mat.nrows()
-    if fs = None:
-        fs = _involution_dict(mat)
+    if fs == None:
+		fs = _involution_dict(mat)
     f0s = dict()
     I = identity_matrix(dim)
     for i in range(dim):
