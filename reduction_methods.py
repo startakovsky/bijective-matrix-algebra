@@ -77,7 +77,7 @@ def reduction_matrix_clean_up(mat, st="standard clean up"):
             d[i,j] = ReductionMaps(A[i,j],B[i,j],f,f0)
     return ReductionMapsDict(d,st)
 
-def reduction_identity_matrix(mat, fs = None, st = None):
+def reduction_identity_matrix(mat, st = None, fs = None):
     r"""
     When a matrix reduces to the identity, this returns
     a ReductionMapDict of from a matrix to I.
