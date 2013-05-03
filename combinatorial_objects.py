@@ -64,7 +64,7 @@ class CombinatorialObject(SageObject):
     """
 
     		    
-    def __init__(self, object, sign, weight = [0]):
+    def __init__(self, object, sign, weight = [0], row = -1, col = -1):
     	r"""
         Initiates the object and sets monomial list to variable.
         See ``CombinatorialObject`` for full documentation.
@@ -75,6 +75,8 @@ class CombinatorialObject(SageObject):
             self._weight_monomial = weight
         else:
             self._weight_monomial = assign_weight_monomial(weight)
+        self._row = row
+        self._col = col
 
     def __repr__(self):
         return str(self._object)
@@ -108,7 +110,21 @@ class CombinatorialObject(SageObject):
     def set_object(self,obj):
         self._object = obj
         return self
-    	
+
+    def set_row(self,row):
+        self._row = row
+        return self
+
+    def set_col(self,col):
+        self._col = col
+        return self
+
+    def get_row(self):
+        return self._row
+
+    def get_col(self):
+        return self._col
+
     def get_weight(self):
     	return self._weight_monomial
     	
