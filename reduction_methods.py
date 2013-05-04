@@ -243,8 +243,8 @@ def reduction_matrix_ABCD_to_pABpCD(A,B,C,D,st = None,reduction = None):
     of ABCD to (AB)CD.
     """
     if reduction == None:
-        mat = matrix_multiply(A,matrix_multiply(matrix_multiply(B,C),D))
-    else:
+        mat = matrix_multiply(matrix_multiply(matrix_multiply(A,B),C),D)
+    else: #not used... yet
         mat = reduction.get_matrix_A()
     d = dict()
     dim = mat.nrows()
@@ -255,15 +255,14 @@ def reduction_matrix_ABCD_to_pABpCD(A,B,C,D,st = None,reduction = None):
             dic_f = dict()
             dic_f0 = dict()
             for elm in mat[i,j]:
-                tmp0 = elm.get_object()[0]
-                tmp1 = elm.get_object()[1].get_object()[0]
-                tmp10 = tmp1.get_object()[0]
-                tmp11 = tmp1.get_object()[1]
-                tmp2 = elm.get_object()[1].get_object()[1]
-                tmp = CombinatorialObject((tmp0,tmp10),tmp0.get_sign()*tmp10.get_sign(),tmp0.get_weight()*tmp10.get_weight())
-                tmpB = CombinatorialObject((tmp,tmp11,tmp2),elm.get_sign(),elm.get_weight())
+                tmp0 = elm.get_object()[0].get_object()[0]
+                tmp01 = tmp0.get_object()[0]
+                tmp02 = tmp0.get_object()[1]
+                tmp1 = elm.get_object()[0].get_object()[1]
+                tmp2 = elm.get_object()[1]
+                tmpB = CombinatorialObject((tmp0,tmp1,tmp2),elm.get_sign(),elm.get_weight())
                 newsetB.add(tmpB)
-                tmpA = CombinatorialObject((tmp0,tmp10,tmp11,tmp2),elm.get_sign(),elm.get_weight())
+                tmpA = CombinatorialObject((tmp01,tmp02,tmp1,tmp2),elm.get_sign(),elm.get_weight())
                 newsetA.add(tmpA)
                 dic_f[tmpA] = tmpA
                 dic_f0[tmpA] = tmpB
@@ -291,12 +290,8 @@ def reduction_lemma_28_23(mat, red_AB_to_I, st = "an application of lemma 28, re
                 tmp0 = elm.get_object()[0]
                 tmp1 = elm.get_object()[1]
                 tmp2 = elm.get_object()[2]
-                #find correct row,col from AB
-                #we use the following to determine the row,column of the AB term
-                #row = _set_partition_number(tmp1.get_object()[0].get_object())
-                #col = len(tmp1.get_object()[1].get_object().cycle_type())
-                row = stirling.find_row(tmp1.get_object()[0])
-                col = stirling.find_col(tmp1.get_object()[1])
+                row = tmp1.get_row()
+                col = tmp1.get_col()
                 f_row_col = red_AB_to_I[row,col].get_SRWP()
                 f0_row_col = red_AB_to_I[row,col].get_SPWP()
                 #assign map
@@ -332,12 +327,8 @@ def reduction_lemma_28_68(mat, red_adjAA_to_I, st = "an application of lemma 28,
                 tmp0 = elm.get_object()[0]
                 tmp1 = elm.get_object()[1]
                 tmp2 = elm.get_object()[2]
-                #find correct row,col from AB to determine which which involution to apply
-                #to the (adj_AABA)_{i,j} term
-                #we use the following to determine the row,column of the adjAA term
-                #since the lefthand term is always adjA, we seek '_' to find its row origin
-                row = list(tmp0.get_object()[0].get_object()).index(CombinatorialObject("_",1))-1
-                col = stirling.find_col(tmp0.get_object()[1])
+                row = tmp0.get_row()
+                col = tmp0.get_col()
                 f_row_col = red_adjAA_to_I[row,col].get_SRWP()
                 f0_row_col = red_adjAA_to_I[row,col].get_SPWP()
                 #assign map
