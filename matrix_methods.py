@@ -46,6 +46,9 @@ def _product_row(mat1, mat2, row):
         C = CombinatorialScalarWrapper(set())
         for k in range(dim):
             C = C + (mat1[row,k]*mat2[k,j])
+            for elm in C:
+                elm.set_row(row)
+                elm.set_col(j)
         r.append(C)
     return r
 
