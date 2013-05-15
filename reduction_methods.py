@@ -77,14 +77,14 @@ def reduction_matrix_clean_up(mat, st="standard clean up"):
             d[i,j] = ReductionMaps(A[i,j],B[i,j],f,f0)
     return ReductionMapsDict(d,st)
 
-def reduction_identity_matrix(mat,involution_dict=None, st = None):
+def reduction_identity_matrix(mat,st=None,involution_dict=None):
     r"""
     When a matrix reduces to the identity, this returns
     a ReductionMapDict of from a matrix to I.
     """
     dim = mat.nrows()
     if involution_dict is None:
-        fs = _involution_dict
+        fs = _involution_dict(mat)
     else:
         fs = involution_dict
     f0s = dict()
@@ -92,7 +92,7 @@ def reduction_identity_matrix(mat,involution_dict=None, st = None):
     for i in range(dim):
         for j in range(dim):
             if i==j:
-                tmp = CombinatorialScalarWrapper(fixed_points(fs[i,j]))
+                tmp = CombinatorialScalarWrapper(set(fixed_points(fs[i,j])))
                 f0s[i,j] = FiniteSetMaps(tmp,I[i,j]).from_dict({tmp.get_set().pop():CombinatorialObject(1,1)})
             else:
                 f0s[i,j] = FiniteSetMaps(set(),set()).from_dict({})

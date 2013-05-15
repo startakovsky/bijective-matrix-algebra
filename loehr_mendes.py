@@ -50,7 +50,7 @@ class LoehrMendes(SageObject):
         _adj_AA = matrix_multiply(self._adj_A,self._A)
         _det_A = matrix_determinant(self._A)
         _det_AI = matrix_identity_multiply_scalar(_det_A,_dim,_dim)
-        _reduction_45 = reduction_identity_matrix(_det_AI,"detAI to I or reduction_45")
+        _reduction_45 = reduction_identity_matrix(_det_AI, "detAI to I or reduction_45")
         _reduction_adj_AA_to_detAI = reduction_lemma_40(_adj_AA)
         _reduction_adj_AA_to_I = _reduction_adj_AA_to_detAI.transitive(_reduction_45)
         #the setup complete
